@@ -1,0 +1,11 @@
+# ── Playwright MCP session data (screenshots and logs, not source code) ───────
+.playwright-mcp/
+
+# ── Node dependencies ─────────────────────────────────────────────────────────
+node_modules/
+
+# ── macOS metadata (binary, not useful to read) ───────────────────────────────
+.DS_Store
+
+# ── Private bot source (separate git repo, reference only) ───────────────────
+cb-enerbot-private/
