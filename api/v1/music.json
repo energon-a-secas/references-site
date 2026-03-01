@@ -1,0 +1,182 @@
+{
+  "meta": {
+    "version": "1.0.0",
+    "generated": "2026-02-28",
+    "description": "Songs, dance videos, and music recommendations from the Enerbot Slack bot. Trigger commands shown under each category.",
+    "commands": {
+      "sing":          "enerbot canta",
+      "dance":         "enerbot baila",
+      "recommend":     "enerbot recomienda una canción"
+    }
+  },
+  "songs": [
+    {
+      "id": "perhaps-love",
+      "title": "Perhaps Love",
+      "artist": "John Denver & Plácido Domingo",
+      "album": "Perhaps Love (1981)",
+      "excerpt": "Perhaps love is like a resting place, a shelter from the storm\nIt exists to give you comfort, it is there to keep you warm\nAnd in those times of trouble when you are most alone\nThe memory of love will bring you home"
+    },
+    {
+      "id": "rasputin",
+      "title": "Rasputin",
+      "artist": "Boney M.",
+      "album": "Nightflight to Venus (1978)",
+      "excerpt": "Ra ra Rasputin\nLover of the Russian queen\nThere was a cat that really was gone\nRa ra Rasputin\nRussia's greatest love machine\nIt was a shame how he carried on"
+    },
+    {
+      "id": "bohemian-rhapsody",
+      "title": "Bohemian Rhapsody",
+      "artist": "Queen",
+      "album": "A Night at the Opera (1975)",
+      "excerpt": "Mama, just killed a man\nPut a gun against his head\nPulled my trigger, now he's dead\nMama, life had just begun\nBut now I've gone and thrown it all away"
+    },
+    {
+      "id": "lets-get-loud",
+      "title": "Let's Get Loud",
+      "artist": "Jennifer Lopez",
+      "album": "On the 6 (1999)",
+      "excerpt": "Let's get loud, let's get loud\nTurn the music up, let's do it\nC'mon people let's get loud\nLet's get loud\nTurn the music up to hear that sound\nLet's get loud, let's get loud\nAin't nobody gotta tell ya\nWhat you gotta do"
+    }
+  ],
+  "dances": [
+    { "id": "dance-1", "url": "https://youtu.be/m6k_t8yEyvE", "type": "green_screen" },
+    { "id": "dance-2", "url": "https://youtu.be/iG1o5xLqqcY", "type": "green_screen" },
+    { "id": "dance-3", "url": "https://youtu.be/IArX33Hoxog", "type": "green_screen" },
+    { "id": "dance-4", "url": "https://youtu.be/dlsjJ2xL0sw", "type": "green_screen" }
+  ],
+  "recommendations": [
+    {
+      "id": "rem-everybody-hurts",
+      "label": "From R.E.M.'s 1992 album Automatic For The People",
+      "url": "https://youtu.be/dLxpNiF0YKs",
+      "tags": ["rem", "classic"]
+    },
+    {
+      "id": "how-i-see-you",
+      "label": "How I see you all",
+      "url": "https://youtu.be/4JkIs37a2JE",
+      "tags": ["meme"]
+    },
+    {
+      "id": "unknown-1",
+      "label": null,
+      "url": "https://youtu.be/Gs069dndIYk",
+      "tags": []
+    },
+    {
+      "id": "all-star",
+      "label": "SOMEBODY ONCE TOLD ME",
+      "url": "https://youtu.be/L_jWHffIx5E",
+      "tags": ["smash-mouth", "shrek", "meme"]
+    },
+    {
+      "id": "unknown-2",
+      "label": null,
+      "url": "https://youtu.be/YVkUvmDQ3HY?t=14",
+      "tags": []
+    },
+    {
+      "id": "jojo-reference-1",
+      "label": "IS THIS A JOJO REFERENCE?",
+      "url": "https://youtu.be/ulw6tL7I6QE",
+      "tags": ["jojo", "anime", "meme"]
+    },
+    {
+      "id": "nailed-it",
+      "label": "*NAIL*ED",
+      "url": "https://youtu.be/EmuBOfurv3o",
+      "tags": ["meme"]
+    },
+    {
+      "id": "jojo-unclouded",
+      "label": "My heart and actions are utterly unclouded",
+      "url": "https://youtu.be/CycuOJZbRvQ",
+      "tags": ["jojo", "anime"]
+    },
+    {
+      "id": "jojo-reference-2",
+      "label": "JOJO REFERENCE",
+      "url": "https://youtu.be/Aq7ddhSGOSE",
+      "tags": ["jojo", "anime", "meme"]
+    },
+    {
+      "id": "la-original",
+      "label": "Esta es la original, supérenlo",
+      "url": "https://youtu.be/nqxVMLVe62U",
+      "tags": []
+    },
+    {
+      "id": "rickroll",
+      "label": "Mis SLAs",
+      "url": "https://youtu.be/dQw4w9WgXcQ",
+      "tags": ["rickroll", "meme", "classic"]
+    },
+    {
+      "id": "i-will",
+      "label": "I will",
+      "url": "https://youtu.be/FHhZPp08s74",
+      "tags": []
+    },
+    {
+      "id": "aleluya",
+      "label": "¡ALELUYA!",
+      "url": "https://youtu.be/4x6leDGV7gs",
+      "tags": []
+    },
+    {
+      "id": "hot-stuff",
+      "label": "🔥 Hot Stuff",
+      "url": "https://youtu.be/tJxOXzE5A8w",
+      "tags": ["disco", "donna-summer"]
+    },
+    {
+      "id": "disco-inferno",
+      "label": "🔥 Disco Inferno",
+      "url": "https://youtu.be/tj1VnD-NRhw",
+      "tags": ["disco"]
+    },
+    {
+      "id": "boogie-wonderland",
+      "label": "💃 Boogie Wonderland",
+      "url": "https://youtu.be/god7hAPv8f0",
+      "tags": ["disco", "earth-wind-fire"]
+    },
+    {
+      "id": "reiniciar-universo",
+      "label": "Me dieron ganas de reiniciar el universo",
+      "url": "https://youtu.be/171skzi5BKc",
+      "tags": []
+    },
+    {
+      "id": "yes-yes-yes",
+      "label": "*Y E S ! Y E S ! YES!!",
+      "url": "https://youtu.be/DwPWGUhEtP0",
+      "tags": ["meme"]
+    },
+    {
+      "id": "d4c",
+      "label": "D4C",
+      "url": "https://youtu.be/2V9Bjp6aJog",
+      "tags": ["jojo", "anime"]
+    },
+    {
+      "id": "zawardo",
+      "label": "ZAWARDO!",
+      "url": "https://youtu.be/e3RlOhqmMms",
+      "tags": ["jojo", "anime", "meme"]
+    },
+    {
+      "id": "video-killed-the-radio-star",
+      "label": "Video killed the radio star",
+      "url": "https://youtu.be/LrjdpNDfZLo",
+      "tags": ["the-buggles", "classic"]
+    },
+    {
+      "id": "funky-town",
+      "label": "Funky Town",
+      "url": "https://youtu.be/FFDs0rQsaTU",
+      "tags": ["disco", "classic"]
+    }
+  ]
+}

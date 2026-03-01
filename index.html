@@ -1,0 +1,704 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Enerbot Reference Matrix — references.neorgon.com</title>
+  <meta name="description" content="Every cultural reference and meme powering the Enerbot Slack bot. Live regex playground, browsable card grid, and a static JSON API.">
+  <meta property="og:title" content="Enerbot Reference Matrix">
+  <meta property="og:description" content="37 cultural references, each with its original regex trigger. Type anything and watch the patterns fire.">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://references.neorgon.com/">
+  <meta property="og:site_name" content="Neorgon">
+  <meta name="robots" content="index, follow">
+  <link rel="canonical" href="https://references.neorgon.com/">
+  <meta name="theme-color" content="#000912">
+  <link rel="icon" type="image/x-icon" href="favicon.ico" />
+  <style>
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+    :root {
+      --bg:            #000912;
+      --font:          'Avenir Next', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      --text-primary:  #f0f4ff;
+      --text-secondary:#8fa0c0;
+      --text-muted:    rgba(143,160,192,.5);
+      --border:        rgba(255,255,255,.08);
+      --border-glow:   rgba(255,255,255,.15);
+      --surface:       rgba(255,255,255,.03);
+      --surface-hover: rgba(255,255,255,.06);
+      --ease-snap:     cubic-bezier(0.34, 1.56, 0.64, 1);
+
+      /* Source accent colors */
+      --te-lo-resumo: #f472b6;
+      --star-wars:    #facc15;
+      --family-guy:   #60a5fa;
+      --simpsons:     #fb923c;
+      --avengers:     #f87171;
+      --harrison:     #fbbf24;
+      --bitconnect:   #4ade80;
+      --31-minutos:   #a78bfa;
+      --gokudolls:    #e879f9;
+      --other:        #22d3ee;
+    }
+
+    body {
+      font-family: var(--font);
+      background: var(--bg);
+      color: var(--text-primary);
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    /* ── Canvas + Orbs + Grid ─────────────────────────────────────────────── */
+    #starfield { position: fixed; inset: 0; z-index: 0; pointer-events: none; }
+    .orb { position: fixed; border-radius: 50%; filter: blur(120px); pointer-events: none; z-index: 0; }
+    .orb-1 { width: 600px; height: 600px; top: -200px; left: -100px;  background: rgba(244,114,182,.08); }
+    .orb-2 { width: 500px; height: 500px; top: 30%;   right: -150px; background: rgba(96,165,250,.06); }
+    .orb-3 { width: 400px; height: 400px; bottom: -100px; left: 30%; background: rgba(167,139,250,.06); }
+    .grid-bg {
+      position: fixed; inset: 0; z-index: 0; pointer-events: none;
+      background-image: linear-gradient(rgba(255,255,255,.015) 1px, transparent 1px),
+                        linear-gradient(90deg, rgba(255,255,255,.015) 1px, transparent 1px);
+      background-size: 60px 60px;
+      mask-image: radial-gradient(ellipse 80% 60% at 50% 50%, black 20%, transparent 100%);
+    }
+
+    /* ── Page shell ──────────────────────────────────────────────────────── */
+    .page { position: relative; z-index: 10; min-height: 100vh; display: flex; flex-direction: column; }
+
+    /* ── Header ──────────────────────────────────────────────────────────── */
+    .header-bar {
+      display: flex; align-items: center; gap: 12px;
+      padding: 16px 40px;
+      border-bottom: 1px solid rgba(255,255,255,.05);
+    }
+    .header-logo { display: flex; align-items: center; gap: 10px; }
+    .header-logo-img {
+      height: 28px; filter: brightness(0) invert(1); opacity: .9;
+      transition: transform .3s var(--ease-snap), opacity .2s;
+    }
+    .header-logo:hover .header-logo-img { transform: scale(1.1) rotate(-6deg); opacity: 1; }
+    .header-title { font-size: 1rem; font-weight: 700; color: var(--text-primary); letter-spacing: .03em; }
+    .header-subtitle { font-size: .72rem; color: var(--text-muted); }
+    nav { display: flex; align-items: center; gap: 6px; margin-left: auto; }
+    .nav-link {
+      font-size: .8rem; font-weight: 500; color: var(--text-secondary);
+      text-decoration: none; padding: 5px 12px; border-radius: 20px;
+      border: 1px solid transparent;
+      transition: color .2s, border-color .2s, background .2s;
+    }
+    .nav-link:hover { color: var(--text-primary); border-color: var(--border-glow); background: var(--surface-hover); }
+    .header-home {
+      display: flex; align-items: center; padding: 5px; margin-left: 4px;
+      color: rgba(255,255,255,.7); text-decoration: none; border-radius: 6px;
+      transition: color .2s, background .2s; flex-shrink: 0;
+    }
+    .header-home:hover { color: #fff; background: rgba(255,255,255,.12); }
+    .header-home svg { width: 28px; height: 28px; display: block; }
+
+    /* ── Hero ─────────────────────────────────────────────────────────────── */
+    .hero { padding: 64px 40px 48px; text-align: center; }
+    .hero-badge {
+      display: inline-flex; align-items: center; gap: 8px;
+      padding: 5px 14px; border-radius: 20px; margin-bottom: 24px;
+      background: rgba(244,114,182,.1); border: 1px solid rgba(244,114,182,.25);
+      color: #f9a8d4; font-size: .73rem; font-weight: 600; letter-spacing: .08em; text-transform: uppercase;
+    }
+    .badge-dot { width: 6px; height: 6px; border-radius: 50%; background: #f9a8d4; animation: pulse-dot 2s ease-in-out infinite; }
+    @keyframes pulse-dot { 0%,100% { opacity:1; transform:scale(1); } 50% { opacity:.4; transform:scale(.6); } }
+
+    .hero-heading {
+      font-size: clamp(2rem, 5.5vw, 3.5rem); font-weight: 800;
+      line-height: 1.1; letter-spacing: -.02em; margin-bottom: 16px;
+    }
+    .neon-word {
+      background: linear-gradient(90deg, #f472b6, #c084fc, #818cf8);
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+    }
+    .hero-sub { font-size: 1rem; color: var(--text-secondary); max-width: 520px; margin: 0 auto 36px; line-height: 1.7; }
+
+    /* ── Live Matcher ─────────────────────────────────────────────────────── */
+    .matcher-wrap {
+      max-width: 680px; margin: 0 auto;
+      background: rgba(255,255,255,.04); border: 1px solid rgba(244,114,182,.2);
+      border-radius: 20px; padding: 24px; backdrop-filter: blur(8px);
+    }
+    .matcher-label { font-size: .72rem; font-weight: 600; letter-spacing: .1em; text-transform: uppercase; color: var(--text-muted); margin-bottom: 10px; }
+    .matcher-input {
+      width: 100%; background: rgba(255,255,255,.06); border: 1px solid var(--border-glow);
+      border-radius: 12px; padding: 14px 18px; font-family: var(--font);
+      font-size: 1rem; color: var(--text-primary); outline: none;
+      transition: border-color .2s, box-shadow .2s;
+    }
+    .matcher-input::placeholder { color: var(--text-muted); }
+    .matcher-input:focus { border-color: rgba(244,114,182,.5); box-shadow: 0 0 0 3px rgba(244,114,182,.08); }
+    .matcher-status { font-size: .8rem; color: var(--text-muted); margin-top: 10px; min-height: 20px; }
+    .matcher-status .match-count { color: #f9a8d4; font-weight: 600; }
+    .matcher-results { display: flex; flex-direction: column; gap: 10px; margin-top: 16px; }
+    .match-card {
+      display: flex; align-items: center; gap: 14px; padding: 12px 16px;
+      background: var(--surface); border: 1px solid; border-radius: 12px;
+      text-decoration: none; transition: transform .15s, box-shadow .2s;
+    }
+    .match-card:hover { transform: translateX(4px); }
+    .match-icon { font-size: 1.4rem; flex-shrink: 0; }
+    .match-body { flex: 1; min-width: 0; }
+    .match-label { font-weight: 600; font-size: .92rem; color: var(--text-primary); }
+    .match-source { font-size: .74rem; color: var(--text-muted); margin-top: 2px; }
+    .match-arrow { color: var(--text-muted); flex-shrink: 0; opacity: 0; transition: opacity .15s, transform .15s; transform: translate(-4px,0); }
+    .match-card:hover .match-arrow { opacity: 1; transform: translate(0,0); }
+
+    /* ── Main content ─────────────────────────────────────────────────────── */
+    .main-content { flex: 1; padding: 0 40px 80px; max-width: 1200px; margin: 0 auto; width: 100%; }
+
+    /* ── Section header ───────────────────────────────────────────────────── */
+    .section-head { display: flex; align-items: baseline; gap: 12px; margin-bottom: 20px; }
+    .section-label { font-size: .72rem; font-weight: 600; letter-spacing: .12em; text-transform: uppercase; color: var(--text-muted); }
+    .section-count { font-size: .72rem; color: var(--text-muted); font-variant-numeric: tabular-nums; }
+
+    /* ── Filter chips ─────────────────────────────────────────────────────── */
+    .filter-row { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 24px; }
+    .filter-chip {
+      font-size: .73rem; font-weight: 600; letter-spacing: .04em;
+      padding: 5px 13px; border-radius: 20px; cursor: pointer; border: 1px solid var(--border);
+      color: var(--text-secondary); background: var(--surface);
+      transition: color .15s, border-color .15s, background .15s;
+      user-select: none;
+    }
+    .filter-chip:hover { color: var(--text-primary); border-color: var(--border-glow); background: var(--surface-hover); }
+    .filter-chip.active { color: var(--chip-color, #f472b6); border-color: var(--chip-color, #f472b6); background: color-mix(in srgb, var(--chip-color, #f472b6) 10%, transparent); }
+
+    /* ── Reference grid ───────────────────────────────────────────────────── */
+    .ref-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 14px; }
+
+    /* ── Reference card ───────────────────────────────────────────────────── */
+    .ref-card {
+      position: relative; background: var(--surface); border: 1px solid var(--border);
+      border-radius: 16px; padding: 22px; display: flex; flex-direction: column; gap: 10px;
+      overflow: hidden; transition: transform .2s, border-color .2s, box-shadow .25s;
+    }
+    .ref-card::before {
+      content: ''; position: absolute; inset: -1px; border-radius: 17px;
+      background: linear-gradient(135deg, var(--card-glow, rgba(244,114,182,.3)), transparent 60%);
+      opacity: 0; transition: opacity .3s; z-index: 0; pointer-events: none;
+    }
+    .ref-card::after {
+      content: ''; position: absolute; top: 0; left: 16px; right: 16px; height: 1px;
+      background: linear-gradient(90deg, transparent, var(--card-glow, rgba(244,114,182,.5)), transparent);
+      opacity: 0; transition: opacity .3s;
+    }
+    .ref-card:hover { transform: translateY(-3px); }
+    .ref-card:hover::before, .ref-card:hover::after { opacity: 1; }
+    .ref-card:hover { border-color: var(--card-border, rgba(255,255,255,.18)); }
+    .ref-card.is-match { border-color: var(--card-border, rgba(255,255,255,.2)) !important; box-shadow: 0 0 20px var(--card-glow, rgba(244,114,182,.2)); }
+
+    .card-inner { position: relative; z-index: 1; display: flex; flex-direction: column; gap: 10px; }
+
+    .card-top { display: flex; align-items: flex-start; justify-content: space-between; }
+    .card-icon {
+      width: 42px; height: 42px; border-radius: 11px; display: flex; align-items: center;
+      justify-content: center; font-size: 1.3rem;
+      background: var(--surface-hover); border: 1px solid var(--border); flex-shrink: 0;
+    }
+    .card-actions { display: flex; gap: 6px; }
+    .card-btn {
+      display: flex; align-items: center; gap: 5px; padding: 5px 10px; border-radius: 8px;
+      font-size: .72rem; font-weight: 600; cursor: pointer; text-decoration: none;
+      border: 1px solid var(--card-border, rgba(255,255,255,.15));
+      color: var(--card-accent, #f472b6); background: color-mix(in srgb, var(--card-accent, #f472b6) 8%, transparent);
+      transition: background .15s, border-color .15s;
+    }
+    .card-btn:hover { background: color-mix(in srgb, var(--card-accent, #f472b6) 16%, transparent); }
+
+    .card-source { font-size: .68rem; font-weight: 600; letter-spacing: .06em; text-transform: uppercase; color: var(--card-accent, #f472b6); margin-top: 2px; }
+    .card-label { font-size: .98rem; font-weight: 700; color: var(--text-primary); line-height: 1.3; }
+    .card-trigger {
+      background: rgba(0,0,0,.3); border: 1px solid rgba(255,255,255,.06); border-radius: 8px;
+      padding: 8px 10px; font-family: 'Menlo', 'Monaco', 'Courier New', monospace;
+      font-size: .7rem; color: var(--text-secondary); line-height: 1.5; word-break: break-all;
+    }
+    .trigger-pattern { color: #f9a8d4; }
+    .trigger-flags { color: var(--text-muted); }
+    .card-keywords { display: flex; flex-wrap: wrap; gap: 5px; }
+    .keyword-tag {
+      font-size: .65rem; font-weight: 600; letter-spacing: .03em; padding: 2px 7px;
+      border-radius: 8px; border: 1px solid;
+      color: var(--card-accent, #f472b6);
+      border-color: color-mix(in srgb, var(--card-accent, #f472b6) 28%, transparent);
+      background: color-mix(in srgb, var(--card-accent, #f472b6) 7%, transparent);
+    }
+    .card-footer { display: flex; align-items: center; gap: 8px; margin-top: 2px; }
+    .lang-badge {
+      font-size: .62rem; font-weight: 600; letter-spacing: .05em; text-transform: uppercase;
+      padding: 2px 7px; border-radius: 6px; border: 1px solid var(--border);
+      color: var(--text-muted); background: var(--surface-hover);
+    }
+    .media-badge {
+      font-size: .62rem; font-weight: 600; letter-spacing: .05em; text-transform: uppercase;
+      padding: 2px 7px; border-radius: 6px; border: 1px solid rgba(255,80,80,.2);
+      color: #ff6060; background: rgba(255,80,80,.07);
+    }
+    .media-badge.gif-badge { border-color: rgba(100,200,100,.2); color: #7ee07e; background: rgba(100,200,100,.07); }
+    .hidden { display: none !important; }
+
+    /* ── API docs section ─────────────────────────────────────────────────── */
+    .docs-section { margin-top: 64px; }
+    .docs-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+    .docs-card {
+      background: var(--surface); border: 1px solid var(--border); border-radius: 16px;
+      padding: 24px; display: flex; flex-direction: column; gap: 12px;
+    }
+    .docs-card-title { font-size: .85rem; font-weight: 700; color: var(--text-primary); }
+    .docs-card-sub { font-size: .8rem; color: var(--text-secondary); line-height: 1.6; }
+    .code-block {
+      background: rgba(0,0,0,.4); border: 1px solid rgba(255,255,255,.08); border-radius: 10px;
+      padding: 14px 16px; font-family: 'Menlo', 'Monaco', 'Courier New', monospace;
+      font-size: .72rem; color: #c0d0f0; line-height: 1.7; overflow-x: auto; white-space: pre;
+    }
+    .code-block .kw  { color: #f9a8d4; }
+    .code-block .fn  { color: #93c5fd; }
+    .code-block .str { color: #86efac; }
+    .code-block .cmt { color: rgba(143,160,192,.5); }
+    .endpoint-row { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+    .method-badge { font-size: .65rem; font-weight: 700; padding: 2px 7px; border-radius: 6px; background: rgba(134,239,172,.15); color: #86efac; border: 1px solid rgba(134,239,172,.2); letter-spacing: .05em; }
+    .endpoint-url { font-family: monospace; font-size: .8rem; color: #93c5fd; word-break: break-all; }
+
+    /* ── Footer ───────────────────────────────────────────────────────────── */
+    .site-footer {
+      text-align: center; padding: 20px 40px 32px;
+      color: rgba(255,255,255,.18); font-size: .78rem; line-height: 1.8;
+      border-top: 1px solid rgba(255,255,255,.04);
+    }
+    .site-footer a { color: rgba(255,255,255,.32); text-decoration: none; }
+    .site-footer a:hover { color: rgba(255,255,255,.6); }
+
+    /* ── Loading state ────────────────────────────────────────────────────── */
+    .loading-msg { text-align: center; padding: 60px 20px; color: var(--text-muted); font-size: .9rem; }
+
+    /* ── Responsive ───────────────────────────────────────────────────────── */
+    @media (max-width: 760px) {
+      .header-bar { padding: 14px 20px; }
+      .hero { padding: 48px 20px 36px; }
+      .main-content { padding: 0 20px 60px; }
+      .docs-grid { grid-template-columns: 1fr; }
+    }
+    @media (max-width: 500px) {
+      .ref-grid { grid-template-columns: 1fr; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; }
+    }
+  </style>
+</head>
+<body>
+
+<canvas id="starfield"></canvas>
+<div class="orb orb-1"></div>
+<div class="orb orb-2"></div>
+<div class="orb orb-3"></div>
+<div class="grid-bg"></div>
+
+<div class="page">
+
+  <header class="header-bar">
+    <a class="header-logo" href="https://references.neorgon.com/">
+      <img src="energon-classic-logo.png" class="header-logo-img" alt="Neorgon">
+      <div>
+        <div class="header-title">Reference Matrix</div>
+        <div class="header-subtitle">Enerbot Cultural References API</div>
+      </div>
+    </a>
+    <nav>
+      <a class="nav-link" href="#api-docs">API Docs</a>
+      <a class="nav-link" href="https://github.com/energon-a-secas/references-api" target="_blank" rel="noopener noreferrer">GitHub</a>
+      <a class="header-home" href="https://neorgon.com/" title="neorgon.com" target="_blank" rel="noopener noreferrer">
+        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/></svg>
+      </a>
+    </nav>
+  </header>
+
+  <!-- Hero + Live Matcher -->
+  <section class="hero">
+    <div class="hero-badge">
+      <span class="badge-dot"></span>
+      37 References · Live Regex · Static JSON API
+    </div>
+    <h1 class="hero-heading">
+      The <span class="neon-word">pattern matrix</span><br>that powers Enerbot
+    </h1>
+    <p class="hero-sub">Every cultural reference carries its original regex trigger. Type anything below and watch the patterns fire — exactly as the Slack bot does it.</p>
+
+    <div class="matcher-wrap">
+      <div class="matcher-label">Live Regex Matcher</div>
+      <input
+        id="matcher-input"
+        class="matcher-input"
+        type="text"
+        placeholder="ya tu sabes / orden 66 / you won't learn anything / tengo miedo…"
+        autocomplete="off"
+        spellcheck="false"
+      >
+      <div class="matcher-status" id="matcher-status">Start typing to test a phrase against all 37 patterns.</div>
+      <div class="matcher-results" id="matcher-results"></div>
+    </div>
+  </section>
+
+  <main class="main-content">
+
+    <!-- Reference browser -->
+    <div class="section-head">
+      <span class="section-label">All References</span>
+      <span class="section-count" id="grid-count"></span>
+    </div>
+
+    <div class="filter-row" id="filter-row">
+      <span class="filter-chip active" data-source="all" style="--chip-color:#f472b6">All</span>
+    </div>
+
+    <div class="ref-grid" id="ref-grid">
+      <div class="loading-msg">Loading references…</div>
+    </div>
+
+    <!-- API Docs -->
+    <div class="docs-section" id="api-docs">
+      <div class="section-head"><span class="section-label">API Documentation</span></div>
+
+      <div class="docs-grid">
+
+        <div class="docs-card">
+          <div class="docs-card-title">Endpoints</div>
+          <div class="docs-card-sub">Two static JSON files, served from GitHub Pages. No auth, no rate limits, CORS-open.</div>
+          <div>
+            <div class="endpoint-row" style="margin-bottom:10px">
+              <span class="method-badge">GET</span>
+              <span class="endpoint-url">https://references.neorgon.com/api/v1/references.json</span>
+            </div>
+            <div class="endpoint-row">
+              <span class="method-badge">GET</span>
+              <span class="endpoint-url">https://references.neorgon.com/api/v1/music.json</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="docs-card">
+          <div class="docs-card-title">Reference schema</div>
+          <div class="code-block"><span class="kw">{</span>
+  <span class="str">"id"</span>:      <span class="str">"orden-66"</span>,
+  <span class="str">"label"</span>:   <span class="str">"Orden 66"</span>,
+  <span class="str">"source"</span>:  <span class="str">"Star Wars"</span>,
+  <span class="str">"trigger"</span>: <span class="kw">{</span>
+    <span class="str">"pattern"</span>: <span class="str">"(orden 66)"</span>,
+    <span class="str">"flags"</span>:   <span class="str">"i"</span>,
+    <span class="str">"keywords"</span>: [<span class="str">"orden 66"</span>]
+  <span class="kw">}</span>,
+  <span class="str">"media"</span>: [<span class="kw">{</span>
+    <span class="str">"url"</span>:     <span class="str">"https://youtu.be/..."</span>,
+    <span class="str">"type"</span>:    <span class="str">"youtube"</span>,
+    <span class="str">"primary"</span>: <span class="kw">true</span>
+  <span class="kw">}</span>],
+  <span class="str">"language"</span>: <span class="str">"es"</span>,
+  <span class="str">"tags"</span>:     [<span class="str">"movie"</span>, <span class="str">"star-wars"</span>]
+<span class="kw">}</span></div>
+        </div>
+
+        <div class="docs-card">
+          <div class="docs-card-title">Pattern matching — JavaScript</div>
+          <div class="docs-card-sub">Reconstruct the original bot logic in any JS client. Multiple entries can match the same input.</div>
+          <div class="code-block"><span class="kw">const</span> res = <span class="kw">await</span> <span class="fn">fetch</span>(<span class="str">'/api/v1/references.json'</span>);
+<span class="kw">const</span> { references } = <span class="kw">await</span> res.<span class="fn">json</span>();
+
+<span class="kw">function</span> <span class="fn">match</span>(text) {
+  <span class="kw">return</span> references.<span class="fn">filter</span>(ref => {
+    <span class="kw">const</span> re = <span class="kw">new</span> <span class="fn">RegExp</span>(
+      ref.trigger.pattern,
+      ref.trigger.flags
+    );
+    <span class="kw">return</span> re.<span class="fn">test</span>(text);
+  });
+}
+
+<span class="fn">match</span>(<span class="str">"ya es demasiado"</span>);
+<span class="cmt">// → [{ id: "ya-es-demasiado", … }]</span></div>
+        </div>
+
+        <div class="docs-card">
+          <div class="docs-card-title">Pattern matching — Python</div>
+          <div class="docs-card-sub">Same logic works in any language that supports regex.</div>
+          <div class="code-block"><span class="kw">import</span> re, requests
+
+data = requests.<span class="fn">get</span>(
+  <span class="str">"https://references.neorgon.com"
+  "/api/v1/references.json"</span>
+).<span class="fn">json</span>()
+
+<span class="kw">def</span> <span class="fn">match</span>(text):
+  matches = []
+  <span class="kw">for</span> ref <span class="kw">in</span> data[<span class="str">"references"</span>]:
+    t = ref[<span class="str">"trigger"</span>]
+    flags = re.IGNORECASE <span class="kw">if</span> <span class="str">"i"</span> <span class="kw">in</span> t[<span class="str">"flags"</span>] <span class="kw">else</span> 0
+    <span class="kw">if</span> re.<span class="fn">search</span>(t[<span class="str">"pattern"</span>], text, flags):
+      matches.<span class="fn">append</span>(ref)
+  <span class="kw">return</span> matches
+
+<span class="fn">match</span>(<span class="str">"madre de dios"</span>)
+<span class="cmt"># → [{ "id": "madre-de-dios", … }]</span></div>
+        </div>
+
+      </div>
+    </div>
+
+  </main>
+
+  <footer class="site-footer">
+    Enerbot Reference Matrix ·
+    <a href="https://neorgon.com/">neorgon.com</a>
+    &nbsp;·&nbsp;
+    <a href="https://github.com/energon-a-secas/references-api" target="_blank" rel="noopener noreferrer">GitHub</a>
+    &nbsp;·&nbsp;
+    <a href="/api/v1/references.json">references.json</a>
+    &nbsp;·&nbsp;
+    <a href="/api/v1/music.json">music.json</a>
+  </footer>
+
+</div>
+
+<script>
+/* ── Starfield ─────────────────────────────────────────────────────────────── */
+(function () {
+  const canvas = document.getElementById('starfield');
+  const ctx = canvas.getContext('2d');
+  let stars = [], W, H;
+  function resize() {
+    W = canvas.width  = window.innerWidth;
+    H = canvas.height = window.innerHeight;
+    stars = Array.from({ length: 180 }, () => ({
+      x: Math.random() * W, y: Math.random() * H,
+      r: Math.random() * 1.3 + 0.3,
+      base: Math.random() * 0.5 + 0.1,
+      speed: Math.random() * 0.012 + 0.004,
+      phase: Math.random() * Math.PI * 2,
+    }));
+  }
+  function draw() {
+    ctx.clearRect(0, 0, W, H);
+    stars.forEach(s => {
+      s.phase += s.speed;
+      const op = s.base + 0.35 * Math.abs(Math.sin(s.phase));
+      ctx.beginPath();
+      ctx.arc(s.x, s.y, s.r, 0, Math.PI * 2);
+      ctx.fillStyle = `rgba(200,220,255,${op})`;
+      ctx.fill();
+    });
+    requestAnimationFrame(draw);
+  }
+  resize();
+  window.addEventListener('resize', resize);
+  if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    requestAnimationFrame(draw);
+  } else {
+    draw();
+  }
+})();
+
+/* ── Source config ─────────────────────────────────────────────────────────── */
+const SOURCE_CONFIG = {
+  'Te lo resumo así no más': { icon: '📺', accent: '#f472b6', glow: 'rgba(244,114,182,.35)', border: 'rgba(244,114,182,.4)' },
+  'Star Wars':               { icon: '⚔️', accent: '#facc15', glow: 'rgba(250,204,21,.3)',  border: 'rgba(250,204,21,.4)'  },
+  'Family Guy':              { icon: '🐕', accent: '#60a5fa', glow: 'rgba(96,165,250,.3)',  border: 'rgba(96,165,250,.4)'  },
+  'Los Simpsons':            { icon: '🍩', accent: '#fb923c', glow: 'rgba(251,146,60,.3)',  border: 'rgba(251,146,60,.4)'  },
+  'Avengers: Infinity War':  { icon: '🦸', accent: '#f87171', glow: 'rgba(248,113,113,.3)', border: 'rgba(248,113,113,.4)' },
+  'Harrison Ford / Air Force One': { icon: '✈️', accent: '#fbbf24', glow: 'rgba(251,191,36,.3)', border: 'rgba(251,191,36,.4)' },
+  'Carlos Matos (BitConnect)': { icon: '💰', accent: '#4ade80', glow: 'rgba(74,222,128,.3)', border: 'rgba(74,222,128,.4)' },
+  '31 Minutos':              { icon: '🤖', accent: '#a78bfa', glow: 'rgba(167,139,250,.3)', border: 'rgba(167,139,250,.4)' },
+  'Gokudolls':               { icon: '🎌', accent: '#e879f9', glow: 'rgba(232,121,249,.3)', border: 'rgba(232,121,249,.4)' },
+  'No explain needed':       { icon: '🧉', accent: '#22d3ee', glow: 'rgba(34,211,238,.3)',  border: 'rgba(34,211,238,.4)'  },
+};
+
+const DEFAULT_CONFIG = { icon: '🎬', accent: '#818cf8', glow: 'rgba(129,140,248,.3)', border: 'rgba(129,140,248,.4)' };
+
+function getConfig(source) {
+  for (const key of Object.keys(SOURCE_CONFIG)) {
+    if (source.startsWith(key)) return SOURCE_CONFIG[key];
+  }
+  return DEFAULT_CONFIG;
+}
+
+/* ── Arrow SVG ─────────────────────────────────────────────────────────────── */
+const ARROW_SVG = `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17L17 7M7 7h10v10"/></svg>`;
+
+/* ── Render helpers ────────────────────────────────────────────────────────── */
+function mediaTypeLabel(ref) {
+  const primary = ref.media[0];
+  return primary.type === 'gif' ? 'GIF' : 'YouTube';
+}
+
+function buildRefCard(ref, isMatch = false) {
+  const cfg = getConfig(ref.source);
+  const mediaLabel = mediaTypeLabel(ref);
+  const isGif = ref.media[0].type === 'gif';
+  const extraMedia = ref.media.length > 1 ? ` <span style="color:var(--text-muted);font-size:.65rem">+${ref.media.length - 1} alt</span>` : '';
+  const noteHtml = ref.notes
+    ? `<div style="font-size:.68rem;color:var(--text-muted);font-style:italic;border-top:1px solid rgba(255,255,255,.06);padding-top:8px">${ref.notes}</div>`
+    : '';
+  const keywordsHtml = ref.trigger.keywords
+    .map(k => `<span class="keyword-tag">${k}</span>`)
+    .join('');
+
+  return `
+<div class="ref-card${isMatch ? ' is-match' : ''}"
+     data-source="${ref.source}" data-id="${ref.id}"
+     style="--card-glow:${cfg.glow};--card-border:${cfg.border};--card-accent:${cfg.accent}">
+  <div class="card-inner">
+    <div class="card-top">
+      <div class="card-icon">${cfg.icon}</div>
+      <div class="card-actions">
+        <a class="card-btn" href="${ref.media[0].url}" target="_blank" rel="noopener noreferrer">
+          ${ARROW_SVG} Open
+        </a>
+      </div>
+    </div>
+    <div>
+      <div class="card-source">${ref.source}</div>
+      <div class="card-label">${ref.label}</div>
+    </div>
+    <div class="card-trigger">
+      <span style="color:var(--text-muted)">/</span><span class="trigger-pattern">${escHtml(ref.trigger.pattern)}</span><span style="color:var(--text-muted)">/</span><span class="trigger-flags">${ref.trigger.flags || ''}</span>
+    </div>
+    <div class="card-keywords">${keywordsHtml}</div>
+    <div class="card-footer">
+      <span class="lang-badge">${ref.language}</span>
+      <span class="media-badge${isGif ? ' gif-badge' : ''}">${mediaLabel}${extraMedia}</span>
+    </div>
+    ${noteHtml}
+  </div>
+</div>`;
+}
+
+function escHtml(s) {
+  return s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+}
+
+/* ── State ─────────────────────────────────────────────────────────────────── */
+let ALL_REFS = [];
+let activeSource = 'all';
+
+/* ── Matching ──────────────────────────────────────────────────────────────── */
+function matchAll(text) {
+  if (!text.trim()) return [];
+  return ALL_REFS.filter(ref => {
+    try {
+      return new RegExp(ref.trigger.pattern, ref.trigger.flags).test(text);
+    } catch (_) { return false; }
+  });
+}
+
+/* ── Live matcher UI ───────────────────────────────────────────────────────── */
+const matcherInput   = document.getElementById('matcher-input');
+const matcherStatus  = document.getElementById('matcher-status');
+const matcherResults = document.getElementById('matcher-results');
+
+function updateMatcher() {
+  const text = matcherInput.value;
+  const matches = matchAll(text);
+  const grid = document.getElementById('ref-grid');
+
+  /* Highlight matched cards in the grid */
+  grid.querySelectorAll('.ref-card').forEach(card => {
+    const ref = ALL_REFS.find(r => r.id === card.dataset.id);
+    if (!ref) return;
+    const isM = matches.some(m => m.id === ref.id);
+    card.classList.toggle('is-match', isM);
+  });
+
+  if (!text.trim()) {
+    matcherStatus.innerHTML = 'Start typing to test a phrase against all 37 patterns.';
+    matcherResults.innerHTML = '';
+    return;
+  }
+
+  if (matches.length === 0) {
+    matcherStatus.innerHTML = `No matches for <em style="color:var(--text-primary)">"${escHtml(text)}"</em>`;
+    matcherResults.innerHTML = '';
+    return;
+  }
+
+  matcherStatus.innerHTML = `<span class="match-count">${matches.length}</span> pattern${matches.length > 1 ? 's' : ''} matched — scroll down to see them highlighted in the grid`;
+  matcherResults.innerHTML = matches.map(ref => {
+    const cfg = getConfig(ref.source);
+    return `
+<a class="match-card" href="${ref.media[0].url}" target="_blank" rel="noopener noreferrer"
+   style="border-color:${cfg.border};--card-accent:${cfg.accent}">
+  <div class="match-icon">${cfg.icon}</div>
+  <div class="match-body">
+    <div class="match-label">${ref.label}</div>
+    <div class="match-source">${ref.source}</div>
+  </div>
+  <div class="match-arrow">${ARROW_SVG}</div>
+</a>`;
+  }).join('');
+}
+
+let debounceTimer;
+matcherInput.addEventListener('input', () => {
+  clearTimeout(debounceTimer);
+  debounceTimer = setTimeout(updateMatcher, 80);
+});
+
+/* ── Grid rendering ────────────────────────────────────────────────────────── */
+function renderGrid() {
+  const grid = document.getElementById('ref-grid');
+  const count = document.getElementById('grid-count');
+  const filtered = activeSource === 'all'
+    ? ALL_REFS
+    : ALL_REFS.filter(r => r.source === activeSource);
+
+  count.textContent = `${filtered.length} of ${ALL_REFS.length}`;
+  grid.innerHTML = filtered.map(ref => buildRefCard(ref)).join('');
+
+  /* Re-apply matches if input has text */
+  if (matcherInput.value.trim()) updateMatcher();
+}
+
+/* ── Filter chips ──────────────────────────────────────────────────────────── */
+function buildFilterChips() {
+  const row = document.getElementById('filter-row');
+  const sources = [...new Set(ALL_REFS.map(r => r.source))].sort();
+
+  sources.forEach(src => {
+    const cfg = getConfig(src);
+    const chip = document.createElement('span');
+    chip.className = 'filter-chip';
+    chip.dataset.source = src;
+    chip.textContent = src;
+    chip.style.setProperty('--chip-color', cfg.accent);
+    row.appendChild(chip);
+  });
+
+  row.addEventListener('click', e => {
+    const chip = e.target.closest('.filter-chip');
+    if (!chip) return;
+    row.querySelectorAll('.filter-chip').forEach(c => c.classList.remove('active'));
+    chip.classList.add('active');
+    activeSource = chip.dataset.source;
+    renderGrid();
+  });
+}
+
+/* ── Bootstrap ─────────────────────────────────────────────────────────────── */
+(async function init() {
+  try {
+    const res  = await fetch('api/v1/references.json');
+    const data = await res.json();
+    ALL_REFS   = data.references;
+    buildFilterChips();
+    renderGrid();
+  } catch (err) {
+    document.getElementById('ref-grid').innerHTML =
+      `<div class="loading-msg">Failed to load references.json — <a href="api/v1/references.json" style="color:#f9a8d4">open directly</a></div>`;
+    console.error('References load error:', err);
+  }
+})();
+</script>
+</body>
+</html>

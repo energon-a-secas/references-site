@@ -1,0 +1,576 @@
+{
+  "meta": {
+    "version": "1.0.0",
+    "generated": "2026-02-28",
+    "count": 37,
+    "description": "Cultural references and memes powering the Enerbot Slack bot. Each entry carries the original regex trigger so any client can replicate the same pattern-matching logic.",
+    "usage": "Reconstruct a RegExp from trigger.pattern + trigger.flags, then test user text against it. Multiple entries can match the same input.",
+    "endpoints": {
+      "references": "https://references.neorgon.com/api/v1/references.json",
+      "music":      "https://references.neorgon.com/api/v1/music.json"
+    },
+    "source": "https://github.com/energon-a-secas/references-api"
+  },
+  "references": [
+    {
+      "id": "orden-66",
+      "label": "Orden 66",
+      "source": "Star Wars",
+      "trigger": {
+        "pattern": "(orden 66)",
+        "flags": "i",
+        "keywords": ["orden 66"]
+      },
+      "media": [
+        { "url": "https://www.youtube.com/watch?v=PiRIZXvggqM", "type": "youtube", "primary": true }
+      ],
+      "language": "es",
+      "tags": ["movie", "star-wars"]
+    },
+    {
+      "id": "ya-tu-sabes",
+      "label": "Rodrigo Gonzales",
+      "source": "No explain needed",
+      "trigger": {
+        "pattern": "(ya tu sabes|ya tu sae)",
+        "flags": "i",
+        "keywords": ["ya tu sabes", "ya tu sae"]
+      },
+      "media": [
+        { "url": "https://i.giphy.com/media/8JT6h898R0D0dyJZQE/giphy-downsized.gif", "type": "gif", "primary": true }
+      ],
+      "language": "es",
+      "tags": ["meme", "chilean"]
+    },
+    {
+      "id": "lo-dijo",
+      "label": "Lo dijo",
+      "source": "Family Guy",
+      "trigger": {
+        "pattern": "(lo dijo)$",
+        "flags": "i",
+        "keywords": ["lo dijo"]
+      },
+      "media": [
+        { "url": "https://youtu.be/uvkj2p-F-14?t=10", "type": "youtube", "primary": true }
+      ],
+      "language": "es",
+      "tags": ["tv-show", "family-guy", "dubbed"]
+    },
+    {
+      "id": "o-no-linda-blair",
+      "label": "O no linda blair?",
+      "source": "Te lo resumo así no más",
+      "trigger": {
+        "pattern": "o no (linda|linda blair)",
+        "flags": "i",
+        "keywords": ["o no linda", "o no linda blair"]
+      },
+      "media": [
+        { "url": "https://www.youtube.com/watch?v=9Bf6TkocYdI", "type": "youtube", "primary": true }
+      ],
+      "language": "es",
+      "tags": ["te-lo-resumo", "meme"]
+    },
+    {
+      "id": "mira-conan",
+      "label": "Mira como te mira Conan",
+      "source": "Te lo resumo así no más",
+      "trigger": {
+        "pattern": "mir[aá].*conan$",
+        "flags": "i",
+        "keywords": ["mira conan", "míra conan"]
+      },
+      "media": [
+        { "url": "https://www.youtube.com/watch?v=J2MLs9zypjs", "type": "youtube", "primary": true }
+      ],
+      "language": "es",
+      "tags": ["te-lo-resumo", "meme"]
+    },
+    {
+      "id": "enfermedad-cura",
+      "label": "Eres la enfermedad y yo soy la cura",
+      "source": "Te lo resumo así no más",
+      "trigger": {
+        "pattern": "(eres la enfermedad|yo la cura)$",
+        "flags": "i",
+        "keywords": ["eres la enfermedad", "yo la cura"]
+      },
+      "media": [
+        { "url": "https://youtu.be/qMsrUfRK5sI?t=6", "type": "youtube", "primary": true }
+      ],
+      "language": "es",
+      "tags": ["te-lo-resumo", "meme"]
+    },
+    {
+      "id": "tu-eras-el-elegido",
+      "label": "Tú eras el elegido",
+      "source": "Star Wars",
+      "trigger": {
+        "pattern": "(t[uú] eras el elegido|juraste destruir)$",
+        "flags": "i",
+        "keywords": ["tú eras el elegido", "tu eras el elegido", "juraste destruir"]
+      },
+      "media": [
+        { "url": "https://www.youtube.com/watch?v=Kyw7kGNC6mI", "type": "youtube", "primary": true }
+      ],
+      "language": "es",
+      "tags": ["movie", "star-wars", "dubbed"]
+    },
+    {
+      "id": "gokudolls",
+      "label": "Gokudolls opening",
+      "source": "Gokudolls",
+      "trigger": {
+        "pattern": "(gokudolls|paarira|palila|parira)",
+        "flags": "i",
+        "keywords": ["gokudolls", "paarira", "palila", "parira"]
+      },
+      "media": [
+        { "url": "https://www.youtube.com/watch?v=w_XU21ay5Nk", "type": "youtube", "primary": true },
+        { "url": "https://www.youtube.com/watch?v=hNQLujzbquA", "type": "youtube", "primary": false }
+      ],
+      "language": "es",
+      "tags": ["meme", "chilean", "random"]
+    },
+    {
+      "id": "get-off-my-plane",
+      "label": "Get off my plane",
+      "source": "Harrison Ford / Air Force One",
+      "trigger": {
+        "pattern": "get off my plane",
+        "flags": "i",
+        "keywords": ["get off my plane"]
+      },
+      "media": [
+        { "url": "https://www.youtube.com/watch?v=jw3PJftd-_E", "type": "youtube", "primary": true },
+        { "url": "https://www.youtube.com/watch?v=hnPsFwkG_ig", "type": "youtube", "primary": false }
+      ],
+      "language": "en",
+      "tags": ["movie", "harrison-ford"]
+    },
+    {
+      "id": "ultraviolento",
+      "label": "Ultraviolento",
+      "source": "Te lo resumo así no más",
+      "trigger": {
+        "pattern": "ultraviolento",
+        "flags": "i",
+        "keywords": ["ultraviolento"]
+      },
+      "media": [
+        { "url": "https://www.youtube.com/watch?v=P2ZjnpjlbTs", "type": "youtube", "primary": true }
+      ],
+      "language": "es",
+      "tags": ["te-lo-resumo", "meme"]
+    },
+    {
+      "id": "situacion-incomoda",
+      "label": "Alguien sáqueme de esta situación incómoda",
+      "source": "Te lo resumo así no más",
+      "trigger": {
+        "pattern": "(sopa de caracol|situaci[oó]n incomoda)",
+        "flags": "i",
+        "keywords": ["sopa de caracol", "situación incómoda", "situacion incomoda"]
+      },
+      "media": [
+        { "url": "https://www.youtube.com/watch?v=QdwwVtrDouA", "type": "youtube", "primary": true }
+      ],
+      "language": "es",
+      "tags": ["te-lo-resumo", "meme"]
+    },
+    {
+      "id": "besitos-chau-chau",
+      "label": "Besitos chau chau",
+      "source": "Te lo resumo así no más",
+      "trigger": {
+        "pattern": "(buenas noches|besitos chau chau)$",
+        "flags": "i",
+        "keywords": ["buenas noches", "besitos chau chau"]
+      },
+      "media": [
+        { "url": "https://youtu.be/uJ4-HbSkjbo", "type": "youtube", "primary": true }
+      ],
+      "language": "es",
+      "tags": ["te-lo-resumo", "meme"]
+    },
+    {
+      "id": "ya-es-demasiado",
+      "label": "No, esto ya es demasiado",
+      "source": "Te lo resumo así no más",
+      "trigger": {
+        "pattern": "ya es demasiado$",
+        "flags": "i",
+        "keywords": ["ya es demasiado"]
+      },
+      "media": [
+        { "url": "https://youtu.be/CdNKsXJ4Mqw", "type": "youtube", "primary": true }
+      ],
+      "language": "es",
+      "tags": ["te-lo-resumo", "meme"]
+    },
+    {
+      "id": "increible",
+      "label": "Increíble",
+      "source": "Te lo resumo así no más",
+      "trigger": {
+        "pattern": "incre[ií]ble",
+        "flags": "i",
+        "keywords": ["increíble", "increible"]
+      },
+      "media": [
+        { "url": "https://youtu.be/t_ZPSV_Ti60", "type": "youtube", "primary": true }
+      ],
+      "language": "es",
+      "tags": ["te-lo-resumo", "meme"]
+    },
+    {
+      "id": "is-it-confirmed",
+      "label": "Is it confirmed?",
+      "source": "Te lo resumo así no más",
+      "trigger": {
+        "pattern": "is it confirmed\\?",
+        "flags": "i",
+        "keywords": ["is it confirmed?"]
+      },
+      "media": [
+        { "url": "https://youtu.be/Zh3tkJE6wdo", "type": "youtube", "primary": true }
+      ],
+      "language": "en",
+      "tags": ["te-lo-resumo", "meme"]
+    },
+    {
+      "id": "laser",
+      "label": "Láser",
+      "source": "Te lo resumo así no más",
+      "trigger": {
+        "pattern": "(hacker|las[eé]r)$",
+        "flags": "i",
+        "keywords": ["hacker", "láser", "laser"]
+      },
+      "media": [
+        { "url": "https://youtu.be/_cpYRrUP9oQ", "type": "youtube", "primary": true }
+      ],
+      "language": "es",
+      "tags": ["te-lo-resumo", "meme"]
+    },
+    {
+      "id": "desmond",
+      "label": "Desmond",
+      "source": "Te lo resumo así no más",
+      "trigger": {
+        "pattern": "(desmond)$",
+        "flags": "i",
+        "keywords": ["desmond"]
+      },
+      "media": [
+        { "url": "https://youtu.be/pSX1O7QeKeI", "type": "youtube", "primary": true }
+      ],
+      "language": "en",
+      "tags": ["te-lo-resumo", "meme", "lost"]
+    },
+    {
+      "id": "al-que-no-le-gusta",
+      "label": "Y al que no le gusta",
+      "source": "Te lo resumo así no más",
+      "trigger": {
+        "pattern": "(y al que no le gusta)$",
+        "flags": "i",
+        "keywords": ["y al que no le gusta"]
+      },
+      "media": [
+        { "url": "https://youtu.be/ht6HidxKYnQ", "type": "youtube", "primary": true }
+      ],
+      "language": "es",
+      "tags": ["te-lo-resumo", "meme"]
+    },
+    {
+      "id": "rick-llorando",
+      "label": "Rick llorando",
+      "source": "Te lo resumo así no más",
+      "trigger": {
+        "pattern": "(rick crying|rick llorando)$",
+        "flags": "i",
+        "keywords": ["rick crying", "rick llorando"]
+      },
+      "media": [
+        { "url": "https://youtu.be/HztfC3iylwA", "type": "youtube", "primary": true }
+      ],
+      "language": "es/en",
+      "tags": ["te-lo-resumo", "meme", "rick-and-morty"]
+    },
+    {
+      "id": "where-are-we",
+      "label": "Where are we",
+      "source": "Te lo resumo así no más",
+      "trigger": {
+        "pattern": "(where are we)$",
+        "flags": "i",
+        "keywords": ["where are we"]
+      },
+      "media": [
+        { "url": "https://youtu.be/12TC-mgaNDg", "type": "youtube", "primary": true }
+      ],
+      "language": "en",
+      "tags": ["te-lo-resumo", "meme"]
+    },
+    {
+      "id": "golpe-mesa",
+      "label": "Golpe mesa / Damn",
+      "source": "Te lo resumo así no más",
+      "trigger": {
+        "pattern": "(golpe mesa|damn)$",
+        "flags": "i",
+        "keywords": ["golpe mesa", "damn"]
+      },
+      "media": [
+        { "url": "https://youtu.be/mZj8caVAJ0M", "type": "youtube", "primary": true }
+      ],
+      "language": "es/en",
+      "tags": ["te-lo-resumo", "meme"]
+    },
+    {
+      "id": "okay-polilla",
+      "label": "Okay polilla",
+      "source": "Te lo resumo así no más",
+      "trigger": {
+        "pattern": "(okay polilla)$",
+        "flags": "i",
+        "keywords": ["okay polilla"]
+      },
+      "media": [
+        { "url": "https://youtu.be/Q89FgD92TNw", "type": "youtube", "primary": true }
+      ],
+      "language": "es",
+      "tags": ["te-lo-resumo", "meme"]
+    },
+    {
+      "id": "horrible-y-fascinante",
+      "label": "Horrible y fascinante",
+      "source": "Te lo resumo así no más",
+      "trigger": {
+        "pattern": "(horrible y fascinante)$",
+        "flags": "i",
+        "keywords": ["horrible y fascinante"]
+      },
+      "media": [
+        { "url": "https://youtu.be/FLRjkVOrUz0", "type": "youtube", "primary": true }
+      ],
+      "language": "es",
+      "tags": ["te-lo-resumo", "meme"]
+    },
+    {
+      "id": "ja",
+      "label": "JÁ",
+      "source": "Te lo resumo así no más",
+      "trigger": {
+        "pattern": "J[AÁ]$",
+        "flags": "i",
+        "keywords": ["JÁ", "JA"]
+      },
+      "media": [
+        { "url": "https://www.youtube.com/watch?v=tdlGckowTCI", "type": "youtube", "primary": true }
+      ],
+      "language": "es",
+      "tags": ["te-lo-resumo", "meme"]
+    },
+    {
+      "id": "no-puedo",
+      "label": "No puedo",
+      "source": "Te lo resumo así no más",
+      "trigger": {
+        "pattern": "no pued(o|o.*)$",
+        "flags": "",
+        "keywords": ["no puedo"]
+      },
+      "media": [
+        { "url": "https://www.youtube.com/watch?v=OztW4abH9_w", "type": "youtube", "primary": true }
+      ],
+      "language": "es",
+      "tags": ["te-lo-resumo", "meme"],
+      "notes": "Case-sensitive — triggers only on lowercase 'no puedo'"
+    },
+    {
+      "id": "risa-victoriosa",
+      "label": "Risa victoriosa",
+      "source": "Te lo resumo así no más",
+      "trigger": {
+        "pattern": "risa victoriosa",
+        "flags": "i",
+        "keywords": ["risa victoriosa"]
+      },
+      "media": [
+        { "url": "https://www.youtube.com/watch?v=k73lbVgQH1s", "type": "youtube", "primary": true }
+      ],
+      "language": "es",
+      "tags": ["te-lo-resumo", "meme"]
+    },
+    {
+      "id": "madre-de-dios",
+      "label": "Madre de dios",
+      "source": "Te lo resumo así no más",
+      "trigger": {
+        "pattern": "madre de dios",
+        "flags": "i",
+        "keywords": ["madre de dios"]
+      },
+      "media": [
+        { "url": "https://www.youtube.com/watch?v=4S9XafwQkS0", "type": "youtube", "primary": true }
+      ],
+      "language": "es",
+      "tags": ["te-lo-resumo", "meme"]
+    },
+    {
+      "id": "malditos",
+      "label": "Malditos sean todos",
+      "source": "Los Simpsons",
+      "trigger": {
+        "pattern": "(malditos$|malditos sean todos)",
+        "flags": "i",
+        "keywords": ["malditos", "malditos sean todos"]
+      },
+      "media": [
+        { "url": "https://www.youtube.com/watch?v=idkatPELCHA", "type": "youtube", "primary": true }
+      ],
+      "language": "es",
+      "tags": ["tv-show", "simpsons", "dubbed"]
+    },
+    {
+      "id": "what-did-it-cost",
+      "label": "What Did It Cost?",
+      "source": "Avengers: Infinity War",
+      "trigger": {
+        "pattern": "(what did it cost\\?|did you do it\\?)$",
+        "flags": "i",
+        "keywords": ["what did it cost?", "did you do it?"]
+      },
+      "media": [
+        { "url": "https://www.youtube.com/watch?v=q500mLWV9FE", "type": "youtube", "primary": true }
+      ],
+      "language": "en",
+      "tags": ["movie", "marvel", "avengers"]
+    },
+    {
+      "id": "nada-puede-salir-mal",
+      "label": "Nada puede salir mal",
+      "source": "Los Simpsons",
+      "trigger": {
+        "pattern": "nada puede (salir|malir) (mal|sal)$",
+        "flags": "i",
+        "keywords": ["nada puede salir mal", "nada puede malir sal"]
+      },
+      "media": [
+        { "url": "https://www.youtube.com/watch?v=PmxSBdRSOQE", "type": "youtube", "primary": true }
+      ],
+      "language": "es",
+      "tags": ["tv-show", "simpsons", "dubbed"],
+      "notes": "Accepts deliberate misspelling 'malir sal' — a reference to the Simpsons clip where Homer mispronounces it"
+    },
+    {
+      "id": "tengo-miedo",
+      "label": "Tengo miedo",
+      "source": "31 Minutos",
+      "trigger": {
+        "pattern": "tengo miedo$",
+        "flags": "i",
+        "keywords": ["tengo miedo"]
+      },
+      "media": [
+        { "url": "https://www.youtube.com/watch?v=c5vj1EhY--c", "type": "youtube", "primary": true }
+      ],
+      "language": "es",
+      "tags": ["tv-show", "31-minutos", "chilean"]
+    },
+    {
+      "id": "batman-alguien-puede-ayudarte",
+      "label": "Alguien puede ayudarte",
+      "source": "Los Simpsons",
+      "trigger": {
+        "pattern": "(batman\\?|alguien puede ayudarte)$",
+        "flags": "i",
+        "keywords": ["batman?", "alguien puede ayudarte"]
+      },
+      "media": [
+        { "url": "https://youtu.be/7oaBo5a8qas?t=7", "type": "youtube", "primary": true }
+      ],
+      "language": "es/en",
+      "tags": ["tv-show", "simpsons", "dubbed"]
+    },
+    {
+      "id": "yo-queria-mani",
+      "label": "Yo quería maní",
+      "source": "Los Simpsons",
+      "trigger": {
+        "pattern": "yo quer[ií]a man[ií]",
+        "flags": "i",
+        "keywords": ["yo quería maní", "yo queria mani"]
+      },
+      "media": [
+        { "url": "https://youtu.be/ae98meP-t28?t=31", "type": "youtube", "primary": true }
+      ],
+      "language": "es",
+      "tags": ["tv-show", "simpsons", "dubbed"]
+    },
+    {
+      "id": "you-wont-learn",
+      "label": "You won't learn anything if I do",
+      "source": "Family Guy",
+      "trigger": {
+        "pattern": "you (wont|won't) learn (anything|anything if i do)",
+        "flags": "i",
+        "keywords": ["you won't learn anything", "you wont learn anything"]
+      },
+      "media": [
+        { "url": "https://youtu.be/xqCY1a1OGFI", "type": "youtube", "primary": true }
+      ],
+      "language": "en",
+      "tags": ["tv-show", "family-guy"]
+    },
+    {
+      "id": "hm-no",
+      "label": "Hm no no no",
+      "source": "Carlos Matos (BitConnect)",
+      "trigger": {
+        "pattern": "hm no$",
+        "flags": "i",
+        "keywords": ["hm no"]
+      },
+      "media": [
+        { "url": "https://youtu.be/15bLDWs0Q4Q", "type": "youtube", "primary": true }
+      ],
+      "language": "en",
+      "tags": ["meme", "crypto", "carlos-matos"]
+    },
+    {
+      "id": "hey-hey-hey",
+      "label": "Hey Hey Hey",
+      "source": "Carlos Matos (BitConnect)",
+      "trigger": {
+        "pattern": "hey hey hey",
+        "flags": "i",
+        "keywords": ["hey hey hey"]
+      },
+      "media": [
+        { "url": "https://www.youtube.com/watch?v=yIL9wLxG01M", "type": "youtube", "primary": true }
+      ],
+      "language": "en",
+      "tags": ["meme", "crypto", "carlos-matos"]
+    },
+    {
+      "id": "you-wont-be-hurting",
+      "label": "You won't be hurting anyone anymore",
+      "source": "Family Guy",
+      "trigger": {
+        "pattern": "you (wont|won't) be hurting",
+        "flags": "",
+        "keywords": ["you won't be hurting", "you wont be hurting"]
+      },
+      "media": [
+        { "url": "https://youtu.be/vvjVHlfb-PU?t=155", "type": "youtube", "primary": true }
+      ],
+      "language": "en",
+      "tags": ["tv-show", "family-guy"],
+      "notes": "Case-sensitive — no 'i' flag in the original Ruby regex"
+    }
+  ]
+}

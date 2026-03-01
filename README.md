@@ -1,0 +1,161 @@
+# Enerbot Reference Matrix
+
+A static JSON API and live playground for every cultural reference and meme in the [Enerbot](https://github.com/energon-a-secas) Slack bot.
+
+**Live:** [references.neorgon.com](https://references.neorgon.com/) · static HTML + JSON, no build step, no backend.
+
+---
+
+## What it does
+
+The original bot identifies meme-worthy phrases by running incoming Slack messages through a table of regex patterns. Each match returns a video link or GIF. This repo exposes that entire reference table as a documented, versioned JSON API — and adds a browser playground where you can type anything and watch the patterns fire in real time.
+
+---
+
+## API Endpoints
+
+| Endpoint | Description |
+|----------|-------------|
+| `GET /api/v1/references.json` | All 37 cultural references with regex triggers, media URLs, language, and tags |
+| `GET /api/v1/music.json` | Songs, dance videos, and music recommendations |
+
+Both are plain JSON files served from GitHub Pages. No auth. No rate limits. CORS-open.
+
+---
+
+## Reference schema
+
+```json
+{
+  "id":      "orden-66",
+  "label":   "Orden 66",
+  "source":  "Star Wars",
+  "trigger": {
+    "pattern":  "(orden 66)",
+    "flags":    "i",
+    "keywords": ["orden 66"]
+  },
+  "media": [
+    { "url": "https://www.youtube.com/watch?v=PiRIZXvggqM", "type": "youtube", "primary": true }
+  ],
+  "language": "es",
+  "tags": ["movie", "star-wars"]
+}
+```
+
+### Fields
+
+| Field | Type | Description |
+|-------|------|-------------|
+| `id` | string | Stable slug identifier |
+| `label` | string | Human-readable reference name |
+| `source` | string | Show, movie, or origin of the reference |
+| `trigger.pattern` | string | Raw regex source — pass directly to `new RegExp(pattern, flags)` |
+| `trigger.flags` | string | Regex flags (`"i"` = case-insensitive, `""` = none) |
+| `trigger.keywords` | string[] | Readable list of phrases that trigger this entry |
+| `media` | array | Media objects with `url`, `type` (`youtube`/`gif`), and `primary` flag |
+| `language` | string | `"es"`, `"en"`, or `"es/en"` for bilingual triggers |
+| `tags` | string[] | Source and content tags for filtering |
+| `notes` | string? | Optional note about trigger quirks (e.g. case sensitivity) |
+
+---
+
+## Pattern matching
+
+The trigger pattern is the exact Ruby regex source, translated to JavaScript. Reconstruct it anywhere:
+
+**JavaScript**
+```js
+const res = await fetch('https://references.neorgon.com/api/v1/references.json');
+const { references } = await res.json();
+
+function match(text) {
+  return references.filter(ref => {
+    const re = new RegExp(ref.trigger.pattern, ref.trigger.flags);
+    return re.test(text);
+  });
+}
+
+match('ya es demasiado');
+// → [{ id: "ya-es-demasiado", label: "No, esto ya es demasiado", source: "Te lo resumo así no más", … }]
+```
+
+**Python**
+```python
+import re, requests
+
+data = requests.get("https://references.neorgon.com/api/v1/references.json").json()
+
+def match(text):
+    matches = []
+    for ref in data["references"]:
+        t = ref["trigger"]
+        flags = re.IGNORECASE if "i" in t["flags"] else 0
+        if re.search(t["pattern"], text, flags):
+            matches.append(ref)
+    return matches
+
+match("madre de dios")
+# → [{ "id": "madre-de-dios", … }]
+```
+
+**Ruby** (original bot pattern)
+```ruby
+ref = JSON.parse(File.read('api/v1/references.json'))
+matches = ref['references'].select do |entry|
+  flags = entry.dig('trigger', 'flags').include?('i') ? Regexp::IGNORECASE : 0
+  Regexp.new(entry.dig('trigger', 'pattern'), flags) =~ text
+end
+```
+
+---
+
+## Sources
+
+| Source | References | Language |
+|--------|-----------|----------|
+| Te lo resumo así no más | 21 | es |
+| Los Simpsons | 4 | es |
+| Family Guy | 3 | en |
+| Star Wars | 2 | es |
+| Carlos Matos (BitConnect) | 2 | en |
+| Avengers: Infinity War | 1 | en |
+| Harrison Ford / Air Force One | 1 | en |
+| 31 Minutos | 1 | es |
+| Gokudolls | 1 | es |
+| No explain needed | 1 | es |
+
+---
+
+## Running locally
+
+```bash
+cd references-api
+python3 -m http.server 8080
+# open http://localhost:8080
+```
+
+Or open `index.html` directly in a browser.
+
+---
+
+## Design
+
+- Deep space background (`#000912`)
+- Animated starfield (180 stars, canvas)
+- Per-source neon accent colors
+- Live regex playground — input triggers real-time match highlighting across the entire card grid
+- API docs with syntax-highlighted code examples
+- `prefers-reduced-motion` respected
+
+---
+
+## Tech
+
+Pure HTML + CSS + JavaScript. No frameworks, no build step. Data is a static JSON file — the "API" is just a well-structured file with a stable URL. Pattern matching uses the browser's native `RegExp`.
+
+---
+
+## Source data
+
+Original patterns live in `cb-enerbot-private/actions/cultural_references.rb`.
