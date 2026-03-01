@@ -75,11 +75,11 @@
     }
     .header-logo { display: flex; align-items: center; gap: 10px; }
     .header-logo-img {
-      height: 28px; filter: brightness(0) invert(1); opacity: .9;
+      height: 36px; filter: brightness(0) invert(1); opacity: .9;
       transition: transform .3s var(--ease-snap), opacity .2s;
     }
     .header-logo:hover .header-logo-img { transform: scale(1.1) rotate(-6deg); opacity: 1; }
-    .header-title { font-size: 1rem; font-weight: 700; color: var(--text-primary); letter-spacing: .03em; }
+    .header-title { font-size: 1.2rem; font-weight: 700; color: var(--text-primary); letter-spacing: .03em; }
     .header-subtitle { font-size: .72rem; color: var(--text-muted); }
     nav { display: flex; align-items: center; gap: 6px; margin-left: auto; }
     .nav-link {
@@ -264,6 +264,47 @@
     .method-badge { font-size: .65rem; font-weight: 700; padding: 2px 7px; border-radius: 6px; background: rgba(134,239,172,.15); color: #86efac; border: 1px solid rgba(134,239,172,.2); letter-spacing: .05em; }
     .endpoint-url { font-family: monospace; font-size: .8rem; color: #93c5fd; word-break: break-all; }
 
+    /* ── Music section ────────────────────────────────────────────────────── */
+    .music-section { margin-top: 64px; }
+    .music-sub-label {
+      font-size: .65rem; font-weight: 600; letter-spacing: .1em; text-transform: uppercase;
+      color: var(--text-muted); margin-bottom: 14px; margin-top: 32px;
+    }
+    .music-sub-label:first-child { margin-top: 0; }
+    .songs-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 14px; }
+    .song-card {
+      background: var(--surface); border: 1px solid var(--border); border-radius: 14px;
+      padding: 18px; display: flex; flex-direction: column; gap: 6px;
+    }
+    .song-title { font-size: .95rem; font-weight: 700; color: var(--text-primary); }
+    .song-artist { font-size: .78rem; color: #a78bfa; font-weight: 600; }
+    .song-album { font-size: .7rem; color: var(--text-muted); }
+    .song-excerpt {
+      font-size: .73rem; color: var(--text-secondary); line-height: 1.55; font-style: italic;
+      border-top: 1px solid rgba(255,255,255,.06); padding-top: 8px; margin-top: 4px;
+      display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden;
+    }
+    .dances-row { display: flex; gap: 10px; flex-wrap: wrap; }
+    .dance-item {
+      display: inline-flex; align-items: center; gap: 6px; padding: 8px 16px;
+      border-radius: 10px; text-decoration: none;
+      background: var(--surface); border: 1px solid var(--border);
+      color: var(--text-primary); font-size: .82rem; font-weight: 500;
+      transition: background .15s, border-color .15s;
+    }
+    .dance-item:hover { background: var(--surface-hover); border-color: var(--border-glow); }
+    .rec-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 8px; }
+    .rec-item {
+      display: flex; align-items: center; gap: 8px; padding: 9px 12px;
+      background: var(--surface); border: 1px solid var(--border); border-radius: 10px;
+      text-decoration: none; color: var(--text-secondary); font-size: .78rem;
+      transition: background .15s, border-color .15s, color .15s;
+    }
+    .rec-item:hover { background: var(--surface-hover); border-color: var(--border-glow); color: var(--text-primary); }
+    .rec-label { flex: 1; min-width: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .rec-arrow { flex-shrink: 0; opacity: .4; transition: opacity .15s; }
+    .rec-item:hover .rec-arrow { opacity: 1; }
+
     /* ── Footer ───────────────────────────────────────────────────────────── */
     .site-footer {
       text-align: center; padding: 20px 40px 32px;
@@ -310,6 +351,7 @@
       </div>
     </a>
     <nav>
+      <a class="nav-link" href="#music">Music</a>
       <a class="nav-link" href="#api-docs">API Docs</a>
       <a class="nav-link" href="https://github.com/energon-a-secas/references-api" target="_blank" rel="noopener noreferrer">GitHub</a>
       <a class="header-home" href="https://neorgon.com/" title="neorgon.com" target="_blank" rel="noopener noreferrer">
@@ -358,6 +400,25 @@
 
     <div class="ref-grid" id="ref-grid">
       <div class="loading-msg">Loading references…</div>
+    </div>
+
+    <!-- Music -->
+    <div class="music-section" id="music">
+      <div class="section-head">
+        <span class="section-label">Music</span>
+        <span class="section-count" id="music-count"></span>
+      </div>
+
+      <div class="music-sub-label">Songs — enerbot canta</div>
+      <div class="songs-grid" id="songs-grid">
+        <div class="loading-msg">Loading…</div>
+      </div>
+
+      <div class="music-sub-label">Dances — enerbot baila</div>
+      <div class="dances-row" id="dances-row"></div>
+
+      <div class="music-sub-label">Recommendations — enerbot recomienda una canción</div>
+      <div class="rec-grid" id="rec-grid"></div>
     </div>
 
     <!-- API Docs -->
@@ -586,10 +647,13 @@ let activeSource = 'all';
 /* ── Matching ──────────────────────────────────────────────────────────────── */
 function matchAll(text) {
   if (!text.trim()) return [];
+  const q = text.trim().toLowerCase();
   return ALL_REFS.filter(ref => {
     try {
-      return new RegExp(ref.trigger.pattern, ref.trigger.flags).test(text);
-    } catch (_) { return false; }
+      if (new RegExp(ref.trigger.pattern, ref.trigger.flags).test(text)) return true;
+    } catch (_) {}
+    /* Partial keyword match — catches typing-in-progress (e.g. "orden 6" → "orden 66") */
+    return ref.trigger.keywords.some(k => k.toLowerCase().startsWith(q));
   });
 }
 
@@ -685,14 +749,45 @@ function buildFilterChips() {
   });
 }
 
+/* ── Music rendering ───────────────────────────────────────────────────────── */
+function renderMusic(data) {
+  const total = data.songs.length + data.dances.length + data.recommendations.length;
+  const countEl = document.getElementById('music-count');
+  if (countEl) countEl.textContent = `${total} items`;
+
+  document.getElementById('songs-grid').innerHTML = data.songs.map(s => `
+<div class="song-card">
+  <div class="song-title">🎵 ${escHtml(s.title)}</div>
+  <div class="song-artist">${escHtml(s.artist)}</div>
+  <div class="song-album">${escHtml(s.album)}</div>
+  <div class="song-excerpt">${escHtml(s.excerpt.split('\n').slice(0, 3).join('\n'))}</div>
+</div>`).join('');
+
+  document.getElementById('dances-row').innerHTML = data.dances.map((d, i) => `
+<a class="dance-item" href="${escHtml(d.url)}" target="_blank" rel="noopener noreferrer">
+  💃 Dance ${i + 1} ${ARROW_SVG}
+</a>`).join('');
+
+  document.getElementById('rec-grid').innerHTML = data.recommendations.map(r => `
+<a class="rec-item" href="${escHtml(r.url)}" target="_blank" rel="noopener noreferrer">
+  <span class="rec-label">${escHtml(r.label || '(untitled)')}</span>
+  <span class="rec-arrow">${ARROW_SVG}</span>
+</a>`).join('');
+}
+
 /* ── Bootstrap ─────────────────────────────────────────────────────────────── */
 (async function init() {
   try {
-    const res  = await fetch('api/v1/references.json');
-    const data = await res.json();
-    ALL_REFS   = data.references;
+    const [refsRes, musicRes] = await Promise.all([
+      fetch('api/v1/references.json'),
+      fetch('api/v1/music.json'),
+    ]);
+    const data      = await refsRes.json();
+    const musicData = await musicRes.json();
+    ALL_REFS = data.references;
     buildFilterChips();
     renderGrid();
+    renderMusic(musicData);
   } catch (err) {
     document.getElementById('ref-grid').innerHTML =
       `<div class="loading-msg">Failed to load references.json — <a href="api/v1/references.json" style="color:#f9a8d4">open directly</a></div>`;
