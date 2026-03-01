@@ -952,25 +952,25 @@
       "notes": "Case-sensitive — no 'i' flag in the original Ruby regex"
     },
     {
-      "id": "addicted-to-nasal-spray",
-      "label": "Addicted to nasal spray",
-      "source": "Family Guy",
+      "id": "actor-argentino",
+      "label": "Actor Argentino",
+      "source": "Digital Circus",
       "trigger": {
-        "pattern": "(I'm addicted to nasal spray|I smell everything)",
+        "pattern": "(no me puedo creer que sea argentino|no me puedo creer que sea vegano)",
         "flags": "i",
         "keywords": [
-          "I'm addicted to nasal spray",
-          "I smell everything"
+          "no me puedo creer que sea argentino",
+          "no me puedo creer que sea vegano"
         ]
       },
       "media": [
         {
-          "url": "https://youtu.be/8a1wgGDauNI?si=cxmfpfIn8VTAdWP-",
+          "url": "https://youtu.be/CFEXJNNQv4k?si=hCxNrWxAEhTxm-MA",
           "type": "youtube",
           "primary": true
         }
       ],
-      "language": "en",
+      "language": "es",
       "tags": [
         "series"
       ]
