@@ -1,0 +1,74 @@
+name: Submit a Cultural Reference
+description: Propose a new cultural reference for the Enerbot reference matrix. A maintainer will review and if approved your entry gets added automatically.
+title: "[Reference] "
+labels: ["submission"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for contributing! Fill in the fields below and a maintainer will review your submission.
+        Once approved, a PR is created automatically and you'll be credited as the contributor. 🎉
+
+  - type: input
+    id: label
+    attributes:
+      label: Reference label
+      description: Short display name for this reference
+      placeholder: "Orden 66"
+    validations:
+      required: true
+
+  - type: input
+    id: source
+    attributes:
+      label: Source
+      description: The movie, show, meme, or origin of this reference
+      placeholder: "Star Wars"
+    validations:
+      required: true
+
+  - type: textarea
+    id: triggers
+    attributes:
+      label: Trigger phrases
+      description: One phrase per line. These are the exact words that trigger the bot.
+      placeholder: |
+        orden 66
+        execute order 66
+    validations:
+      required: true
+
+  - type: input
+    id: regex
+    attributes:
+      label: Custom regex
+      description: Optional — leave blank and a pattern will be auto-generated from your trigger phrases above.
+      placeholder: "(orden 66|execute order 66)"
+
+  - type: input
+    id: media_url
+    attributes:
+      label: Media URL
+      description: YouTube link, Giphy GIF URL, or direct image URL to display when triggered
+      placeholder: "https://www.youtube.com/watch?v=..."
+    validations:
+      required: true
+
+  - type: dropdown
+    id: language
+    attributes:
+      label: Language
+      description: Primary language of this reference
+      options:
+        - es
+        - en
+        - other
+    validations:
+      required: true
+
+  - type: input
+    id: tags
+    attributes:
+      label: Tags
+      description: Comma-separated tags to help categorise the reference
+      placeholder: "movie, star-wars"

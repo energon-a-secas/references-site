@@ -305,6 +305,25 @@
     .rec-arrow { flex-shrink: 0; opacity: .4; transition: opacity .15s; }
     .rec-item:hover .rec-arrow { opacity: 1; }
 
+    /* ── Submit CTA ───────────────────────────────────────────────────────── */
+    .submit-cta {
+      display: flex; align-items: center; justify-content: space-between;
+      margin-top: 40px; padding: 18px 24px; border-radius: 14px; gap: 16px;
+      background: rgba(244,114,182,.05); border: 1px solid rgba(244,114,182,.15);
+      flex-wrap: wrap;
+    }
+    .submit-cta-copy { display: flex; flex-direction: column; gap: 3px; }
+    .submit-cta-title { font-size: .9rem; font-weight: 600; color: var(--text-primary); }
+    .submit-cta-desc  { font-size: .78rem; color: var(--text-secondary); }
+    .submit-cta-btn {
+      display: inline-flex; align-items: center; gap: 6px; flex-shrink: 0;
+      padding: 9px 18px; border-radius: 10px; text-decoration: none;
+      font-size: .82rem; font-weight: 600;
+      background: rgba(244,114,182,.12); border: 1px solid rgba(244,114,182,.3);
+      color: #f9a8d4; transition: background .15s, border-color .15s;
+    }
+    .submit-cta-btn:hover { background: rgba(244,114,182,.22); border-color: rgba(244,114,182,.55); }
+
     /* ── Footer ───────────────────────────────────────────────────────────── */
     .site-footer {
       text-align: center; padding: 20px 40px 32px;
@@ -353,7 +372,8 @@
     <nav>
       <a class="nav-link" href="#music">Music</a>
       <a class="nav-link" href="#api-docs">API Docs</a>
-      <a class="nav-link" href="https://github.com/energon-a-secas/references-api" target="_blank" rel="noopener noreferrer">GitHub</a>
+      <a class="nav-link" href="https://github.com/energon-a-secas/reference-site/issues/new?template=new-reference.yml" target="_blank" rel="noopener noreferrer" style="color:#f9a8d4;border-color:rgba(244,114,182,.2)">Submit</a>
+      <a class="nav-link" href="https://github.com/energon-a-secas/reference-site" target="_blank" rel="noopener noreferrer">GitHub</a>
       <a class="header-home" href="https://neorgon.com/" title="neorgon.com" target="_blank" rel="noopener noreferrer">
         <svg viewBox="0 0 24 24" fill="currentColor"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/></svg>
       </a>
@@ -400,6 +420,18 @@
 
     <div class="ref-grid" id="ref-grid">
       <div class="loading-msg">Loading references…</div>
+    </div>
+
+    <!-- Submit CTA -->
+    <div class="submit-cta">
+      <div class="submit-cta-copy">
+        <span class="submit-cta-title">Know a reference we're missing?</span>
+        <span class="submit-cta-desc">Submit one via GitHub — get credited as a contributor once it's merged.</span>
+      </div>
+      <a class="submit-cta-btn" href="https://github.com/energon-a-secas/reference-site/issues/new?template=new-reference.yml" target="_blank" rel="noopener noreferrer">
+        Submit a reference
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17L17 7M7 7h10v10"/></svg>
+      </a>
     </div>
 
     <!-- Music -->
@@ -515,7 +547,7 @@ data = requests.<span class="fn">get</span>(
     Enerbot Reference Matrix ·
     <a href="https://neorgon.com/">neorgon.com</a>
     &nbsp;·&nbsp;
-    <a href="https://github.com/energon-a-secas/references-api" target="_blank" rel="noopener noreferrer">GitHub</a>
+    <a href="https://github.com/energon-a-secas/reference-site" target="_blank" rel="noopener noreferrer">GitHub</a>
     &nbsp;·&nbsp;
     <a href="/api/v1/references.json">references.json</a>
     &nbsp;·&nbsp;
