@@ -127,6 +127,19 @@ end
 
 ---
 
+## Contributing a reference
+
+Missing a reference? Submit one directly from the site or via GitHub:
+
+1. Go to **[references.neorgon.com](https://references.neorgon.com/)** and click **Submit a reference**, or open a [new issue](https://github.com/energon-a-secas/reference-site/issues/new?template=new-reference.yml) using the form template.
+2. Fill in the label, source, trigger phrases, media URL, language, and tags.
+3. A maintainer reviews the submission. Once the `approved` label is added, a GitHub Action automatically opens a PR with the new entry.
+4. After the PR is merged, the submitter is credited as a contributor.
+
+No manual JSON editing required.
+
+---
+
 ## Running locally
 
 ```bash
