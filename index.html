@@ -4,23 +4,22 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Enerbot Reference Matrix</title>
-  <meta name="description" content="Browse the 37 cultural references and memes behind the Enerbot Slack bot. Live regex playground and a clean JSON API, no auth required.">
+  <meta name="description" content="Browse the 37 cultural references and memes behind the Enerbot Slack bot. Live regex playground and JSON API, no auth required">
   <meta property="og:title" content="Enerbot Reference Matrix">
-  <meta property="og:description" content="The 37 cultural references behind Enerbot, with live regex playground and a public JSON API.">
+  <meta property="og:description" content="The 37 cultural references behind Enerbot, with live regex playground and JSON API">
   <meta property="og:type" content="website">
   <meta property="og:url" content="https://references.neorgon.com/">
   <meta property="og:site_name" content="Neorgon">
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="Enerbot Reference Matrix">
-  <meta name="twitter:description" content="The 37 cultural references behind Enerbot, with live regex playground and a public JSON API.">
+  <meta name="twitter:description" content="The 37 cultural references behind Enerbot, with live regex playground and JSON API">
   <meta name="robots" content="index, follow">
   <link rel="canonical" href="https://references.neorgon.com/">
   <meta property="og:locale" content="en_US">
   <meta name="theme-color" content="#000912">
-  <!-- og:image: uncomment when social preview image is ready (1200x630 PNG)
-  <meta property="og:image" content="https://references.neorgon.com/og-preview.png">
+  <meta property="og:image" content="https://references.neorgon.com/og-preview.jpg">
   <meta property="og:image:width" content="1200">
-  <meta property="og:image:height" content="630"> -->
+  <meta property="og:image:height" content="630">
   <link rel="icon" type="image/x-icon" href="favicon.ico" />
   <style>
     *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
@@ -30,7 +29,7 @@
       --font:          'Avenir Next', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
       --text-primary:  #f0f4ff;
       --text-secondary:#8fa0c0;
-      --text-muted:    rgba(143,160,192,.5);
+      --text-muted:    rgba(143,160,192,.65);
       --border:        rgba(255,255,255,.08);
       --border-glow:   rgba(255,255,255,.15);
       --surface:       rgba(255,255,255,.03);
@@ -77,6 +76,7 @@
 
     /* ── Header ──────────────────────────────────────────────────────────── */
     .header-bar {
+      background: linear-gradient(in oklch 135deg, #B015B0 0%, #3D0080 50%, #040714 100%);
       display: flex; align-items: center; gap: 12px;
       padding: 16px 40px;
       border-bottom: 1px solid rgba(255,255,255,.05);
@@ -354,6 +354,39 @@
     @media (max-width: 500px) {
       .ref-grid { grid-template-columns: 1fr; }
     }
+    :focus-visible {
+      outline: 2px solid var(--accent-bright, #0080ff);
+      outline-offset: 2px;
+    }
+    .skip-link {
+      position: absolute; top: -100%; left: 16px; z-index: 1000;
+      padding: 8px 16px; background: var(--accent-bright, #0080ff); color: #000;
+      font-weight: 600; font-size: .875rem; border-radius: 0 0 6px 6px;
+      text-decoration: none; transition: top .2s;
+    }
+    .skip-link:focus { top: 0; }
+
+    /* ── Button press feedback ──────────────────────────────────── */
+    button:active, .btn:active {
+      transform: scale(0.97);
+      transition-duration: 120ms;
+    }
+
+    /* ── Entrance animation ─────────────────────────────────────── */
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(8px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    /* ── Skeleton loading ───────────────────────────────────────── */
+    @keyframes shimmer { to { background-position: -200% 0; } }
+    .skeleton {
+      background: linear-gradient(90deg, rgba(255,255,255,.03) 25%, rgba(255,255,255,.06) 50%, rgba(255,255,255,.03) 75%);
+      background-size: 200% 100%;
+      animation: shimmer 1.5s ease-in-out infinite;
+      border-radius: 10px;
+    }
+
     @media (prefers-reduced-motion: reduce) {
       *, *::before, *::after { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; }
     }
@@ -369,12 +402,14 @@
 
 <div class="page">
 
+  <a class="skip-link" href="#main">Skip to content</a>
+
   <header class="header-bar">
     <a class="header-logo" href="https://references.neorgon.com/">
       <img src="energon-classic-logo.png" class="header-logo-img" alt="Neorgon">
       <div>
         <div class="header-title">Reference Matrix</div>
-        <div class="header-subtitle">Every Enerbot meme, documented and queryable</div>
+        <div class="header-subtitle">Search every Enerbot meme by regex or keyword</div>
       </div>
     </a>
     <nav>
@@ -382,7 +417,7 @@
       <a class="nav-link" href="#api-docs">API Docs</a>
       <a class="nav-link" href="https://github.com/energon-a-secas/reference-site/issues/new?template=new-reference.yml" target="_blank" rel="noopener noreferrer" style="color:#f9a8d4;border-color:rgba(244,114,182,.2)">Submit</a>
       <a class="nav-link" href="https://github.com/energon-a-secas/reference-site" target="_blank" rel="noopener noreferrer">GitHub</a>
-      <a class="header-home" href="https://neorgon.com/" title="neorgon.com" target="_blank" rel="noopener noreferrer">
+      <a class="header-home" href="https://neorgon.com/" title="neorgon.com" aria-label="Neorgon home" target="_blank" rel="noopener noreferrer">
         <svg viewBox="0 0 24 24" fill="currentColor"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/></svg>
       </a>
     </nav>
@@ -395,9 +430,9 @@
       37 References · Live Regex · Static JSON API
     </div>
     <h1 class="hero-heading">
-      The <span class="neon-word">pattern matrix</span><br>that powers Enerbot
+      The <span class="neon-word">regex patterns</span><br>behind Enerbot
     </h1>
-    <p class="hero-sub">Every cultural reference carries its original regex trigger. Type anything below and watch the patterns fire — exactly as the Slack bot does it.</p>
+    <p class="hero-sub">Every reference includes its original regex trigger. Type anything below and watch the patterns fire, exactly as the Slack bot does.</p>
 
     <div class="matcher-wrap">
       <div class="matcher-label">Live Regex Matcher</div>
@@ -409,12 +444,12 @@
         autocomplete="off"
         spellcheck="false"
       >
-      <div class="matcher-status" id="matcher-status">Start typing to test a phrase against all 37 patterns.</div>
+      <div class="matcher-status" id="matcher-status">Type a phrase to test it against all 37 patterns.</div>
       <div class="matcher-results" id="matcher-results"></div>
     </div>
   </section>
 
-  <main class="main-content">
+  <main class="main-content" id="main">
 
     <!-- Reference browser -->
     <div class="section-head">
@@ -434,7 +469,7 @@
     <div class="submit-cta">
       <div class="submit-cta-copy">
         <span class="submit-cta-title">Know a reference we're missing?</span>
-        <span class="submit-cta-desc">Submit one via GitHub — get credited as a contributor once it's merged.</span>
+        <span class="submit-cta-desc">Submit one via GitHub and get credited as a contributor once it's merged.</span>
       </div>
       <a class="submit-cta-btn" href="https://github.com/energon-a-secas/reference-site/issues/new?template=new-reference.yml" target="_blank" rel="noopener noreferrer">
         Submit a reference
@@ -449,15 +484,15 @@
         <span class="section-count" id="music-count"></span>
       </div>
 
-      <div class="music-sub-label">Songs — enerbot canta</div>
+      <div class="music-sub-label">Songs (enerbot canta)</div>
       <div class="songs-grid" id="songs-grid">
         <div class="loading-msg">Loading…</div>
       </div>
 
-      <div class="music-sub-label">Dances — enerbot baila</div>
+      <div class="music-sub-label">Dances (enerbot baila)</div>
       <div class="dances-row" id="dances-row"></div>
 
-      <div class="music-sub-label">Recommendations — enerbot recomienda una canción</div>
+      <div class="music-sub-label">Recommendations (enerbot recomienda una canción)</div>
       <div class="rec-grid" id="rec-grid"></div>
     </div>
 
@@ -469,7 +504,7 @@
 
         <div class="docs-card">
           <div class="docs-card-title">Endpoints</div>
-          <div class="docs-card-sub">Two static JSON files, served from GitHub Pages. No auth, no rate limits, CORS-open.</div>
+          <div class="docs-card-sub">Two static JSON files on GitHub Pages. No auth, no rate limits, CORS-open.</div>
           <div>
             <div class="endpoint-row" style="margin-bottom:10px">
               <span class="method-badge">GET</span>
@@ -505,7 +540,7 @@
 
         <div class="docs-card">
           <div class="docs-card-title">Pattern matching — JavaScript</div>
-          <div class="docs-card-sub">Reconstruct the original bot logic in any JS client. Multiple entries can match the same input.</div>
+          <div class="docs-card-sub">Replicate the bot's matching logic in any JS client. Multiple entries can match the same input.</div>
           <div class="code-block"><span class="kw">const</span> res = <span class="kw">await</span> <span class="fn">fetch</span>(<span class="str">'/api/v1/references.json'</span>);
 <span class="kw">const</span> { references } = <span class="kw">await</span> res.<span class="fn">json</span>();
 
@@ -525,7 +560,7 @@
 
         <div class="docs-card">
           <div class="docs-card-title">Pattern matching — Python</div>
-          <div class="docs-card-sub">Same logic works in any language that supports regex.</div>
+          <div class="docs-card-sub">The matching logic works in any language with regex support.</div>
           <div class="code-block"><span class="kw">import</span> re, requests
 
 data = requests.<span class="fn">get</span>(
@@ -722,7 +757,7 @@ function updateMatcher() {
   });
 
   if (!text.trim()) {
-    matcherStatus.innerHTML = 'Start typing to test a phrase against all 37 patterns.';
+    matcherStatus.innerHTML = 'Type a phrase to test it against all 37 patterns.';
     matcherResults.innerHTML = '';
     return;
   }
@@ -733,7 +768,7 @@ function updateMatcher() {
     return;
   }
 
-  matcherStatus.innerHTML = `<span class="match-count">${matches.length}</span> pattern${matches.length > 1 ? 's' : ''} matched — scroll down to see them highlighted in the grid`;
+  matcherStatus.innerHTML = `<span class="match-count">${matches.length}</span> pattern${matches.length > 1 ? 's' : ''} matched, highlighted in the grid below`;
   matcherResults.innerHTML = matches.map(ref => {
     const cfg = getConfig(ref.source);
     return `
@@ -836,7 +871,7 @@ function renderMusic(data) {
     renderMusic(musicData);
   } catch (err) {
     document.getElementById('ref-grid').innerHTML =
-      `<div class="loading-msg">Failed to load references.json — <a href="api/v1/references.json" style="color:#f9a8d4">open directly</a></div>`;
+      `<div class="loading-msg">Failed to load references.json. <a href="api/v1/references.json" style="color:#f9a8d4">Open directly</a></div>`;
     console.error('References load error:', err);
   }
 })();
