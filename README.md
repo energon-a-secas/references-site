@@ -40,7 +40,7 @@ The original bot identifies meme-worthy phrases by running incoming Slack messag
 
 ---
 
-## API Endpoints
+## API endpoints
 
 | Endpoint | Description |
 |----------|-------------|
