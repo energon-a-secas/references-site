@@ -93,18 +93,26 @@
     /* ── Header ──────────────────────────────────────────────────────────── */
     .header-bar {
       background: linear-gradient(in oklch 135deg, #B015B0 0%, #3D0080 50%, #040714 100%);
-      display: flex; align-items: center; gap: 12px;
-      padding: 16px 40px;
+      backdrop-filter: blur(12px);
       border-bottom: 1px solid rgba(255,255,255,.05);
+      padding: 0 24px;
+      height: 68px;
+      position: sticky;
+      top: 0;
+      z-index: 200;
+      display: flex;
+      align-items: center;
     }
-    .header-logo { display: flex; align-items: center; gap: 10px; text-decoration: none; }
+    .header-logo { display: flex; align-items: center; gap: 10px; flex-shrink: 0; text-decoration: none; color: inherit; }
     .header-logo-img {
-      height: 36px; filter: brightness(0) invert(1); opacity: .9;
-      transition: transform .3s var(--ease-snap), opacity .2s;
+      height: 36px; width: auto; flex-shrink: 0;
+      filter: brightness(0) invert(1);
+      transition: transform .3s var(--ease-snap);
+      display: block;
     }
-    .header-logo:hover .header-logo-img { transform: scale(1.1) rotate(-6deg); opacity: 1; }
-    .header-title { font-size: 1.2rem; font-weight: 700; color: var(--text-primary); letter-spacing: .03em; }
-    .header-subtitle { font-size: .72rem; color: var(--text-muted); }
+    .header-logo-img:hover { transform: scale(1.14) rotate(-9deg); }
+    .header-logo h1 { font-size: 1.2em; font-weight: 600; color: var(--text-primary); letter-spacing: .5px; }
+    .header-subtitle { font-size: .82em; color: rgba(255,255,255,.72); font-weight: 500; margin-top: 3px; }
     nav { display: flex; align-items: center; gap: 6px; margin-left: auto; }
     .nav-link {
       font-size: .8rem; font-weight: 500; color: var(--text-secondary);
@@ -114,12 +122,15 @@
     }
     .nav-link:hover { color: var(--text-primary); border-color: var(--border-glow); background: var(--surface-hover); }
     .header-home {
-      display: flex; align-items: center; padding: 5px; margin-left: 4px;
-      color: rgba(255,255,255,.7); text-decoration: none; border-radius: 6px;
+      display: flex; align-items: center;
+      margin-left: 4px;
+      padding: 5px;
+      color: rgba(255,255,255,0.9); text-decoration: none;
+      border-radius: 6px;
       transition: color .2s, background .2s; flex-shrink: 0;
     }
-    .header-home:hover { color: #fff; background: rgba(255,255,255,.12); }
-    .header-home svg { width: 28px; height: 28px; display: block; }
+    .header-home:hover { color: #fff; background: rgba(255,255,255,0.12); }
+    .header-home svg { width: 34px; height: 34px; display: block; }
 
     /* ── Hero ─────────────────────────────────────────────────────────────── */
     .hero { padding: 64px 40px 48px; text-align: center; }
@@ -384,7 +395,7 @@
 
     /* ── Responsive ───────────────────────────────────────────────────────── */
     @media (max-width: 760px) {
-      .header-bar { padding: 14px 20px; }
+      .header-bar { padding: 0 16px; }
       .hero { padding: 48px 20px 36px; }
       .main-content { padding: 0 20px 60px; }
       .docs-grid { grid-template-columns: 1fr; }
@@ -446,7 +457,7 @@
     <a class="header-logo" href="https://references.neorgon.com/">
       <img src="energon-classic-logo.png" class="header-logo-img" alt="Neorgon">
       <div>
-        <div class="header-title">Reference Matrix</div>
+        <h1>Reference Matrix</h1>
         <div class="header-subtitle">Search every Enerbot meme by regex or keyword</div>
       </div>
     </a>
