@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta http-equiv="X-Frame-Options" content="DENY">
-  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob:; frame-ancestors 'none'">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob: https://img.youtube.com https://*.giphy.com; frame-ancestors 'none'">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Enerbot Reference Matrix</title>
   <meta name="description" content="Browse the 37 cultural references and memes behind the Enerbot Slack bot. Live regex playground and JSON API, no auth required">
@@ -264,6 +264,28 @@
       color: #ff6060; background: rgba(255,80,80,.07);
     }
     .media-badge.gif-badge { border-color: rgba(100,200,100,.2); color: #7ee07e; background: rgba(100,200,100,.07); }
+
+    /* ── Card thumbnail ──────────────────────────────────────────────────── */
+    .card-thumb {
+      position: relative; border-radius: 10px; overflow: hidden;
+      aspect-ratio: 16 / 9; background: rgba(0,0,0,.3);
+      border: 1px solid rgba(255,255,255,.06);
+      display: block; text-decoration: none; cursor: pointer;
+    }
+    .card-thumb img {
+      width: 100%; height: 100%; object-fit: cover; display: block;
+      transition: transform .3s ease, opacity .3s;
+    }
+    .ref-card:hover .card-thumb img { transform: scale(1.04); }
+    .card-thumb-play {
+      position: absolute; inset: 0; display: flex; align-items: center; justify-content: center;
+      background: rgba(0,0,0,.25); opacity: 0; transition: opacity .2s;
+    }
+    .ref-card:hover .card-thumb-play { opacity: 1; }
+    .card-thumb-play svg { filter: drop-shadow(0 2px 6px rgba(0,0,0,.5)); }
+    .card-thumb img.thumb-error { display: none; }
+    .card-thumb.thumb-hidden { display: none; }
+
     .hidden { display: none !important; }
 
     /* ── API docs section ─────────────────────────────────────────────────── */
@@ -678,6 +700,31 @@ function getConfig(source) {
 
 /* ── Arrow SVG ─────────────────────────────────────────────────────────────── */
 const ARROW_SVG = `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17L17 7M7 7h10v10"/></svg>`;
+const PLAY_SVG = `<svg width="48" height="48" viewBox="0 0 48 48" fill="none"><circle cx="24" cy="24" r="24" fill="rgba(0,0,0,.55)"/><path d="M19 15l14 9-14 9V15z" fill="#fff"/></svg>`;
+
+/* ── Thumbnail helpers ────────────────────────────────────────────────────── */
+function extractYouTubeId(url) {
+  const m = url.match(/(?:youtube\.com\/watch\?v=|youtu\.be\/|youtube\.com\/embed\/)([a-zA-Z0-9_-]{11})/);
+  return m ? m[1] : null;
+}
+
+function buildThumbHtml(ref) {
+  const primary = ref.media[0];
+  if (primary.type === 'youtube') {
+    const vid = extractYouTubeId(primary.url);
+    if (!vid) return '';
+    return `<a class="card-thumb" href="${escHtml(primary.url)}" target="_blank" rel="noopener noreferrer">
+      <img src="https://img.youtube.com/vi/${vid}/mqdefault.jpg" alt="${escHtml(ref.label)}" loading="lazy" onerror="this.classList.add('thumb-error');this.parentElement.classList.add('thumb-hidden')">
+      <div class="card-thumb-play">${PLAY_SVG}</div>
+    </a>`;
+  }
+  if (primary.type === 'gif' || primary.type === 'image') {
+    return `<a class="card-thumb" href="${escHtml(primary.url)}" target="_blank" rel="noopener noreferrer">
+      <img src="${escHtml(primary.url)}" alt="${escHtml(ref.label)}" loading="lazy" onerror="this.classList.add('thumb-error');this.parentElement.classList.add('thumb-hidden')">
+    </a>`;
+  }
+  return '';
+}
 
 /* ── Render helpers ────────────────────────────────────────────────────────── */
 function mediaTypeLabel(ref) {
@@ -697,6 +744,8 @@ function buildRefCard(ref, isMatch = false) {
     .map(k => `<span class="keyword-tag">${k}</span>`)
     .join('');
 
+  const thumbHtml = buildThumbHtml(ref);
+
   return `
 <div class="ref-card${isMatch ? ' is-match' : ''}"
      data-source="${ref.source}" data-id="${ref.id}"
@@ -710,6 +759,7 @@ function buildRefCard(ref, isMatch = false) {
         </a>
       </div>
     </div>
+    ${thumbHtml}
     <div>
       <div class="card-source">${ref.source}</div>
       <div class="card-label">${ref.label}</div>
