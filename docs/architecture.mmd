@@ -1,0 +1,35 @@
+---
+config:
+  theme: base
+  themeVariables:
+    primaryColor: "#0f172a"
+    primaryTextColor: "#e2e8f0"
+    primaryBorderColor: "#0063e5"
+    lineColor: "#38bdf8"
+    secondaryColor: "#1e293b"
+    tertiaryColor: "#1e293b"
+    clusterBkg: "#f0f7ff"
+    clusterBorder: "#bfdbfe"
+    edgeLabelBackground: "#e8f0ff"
+    mainBkg: "#0f172a"
+    nodeBorder: "#0063e5"
+    titleColor: "#1e1b4b"
+    fontFamily: "ui-sans-serif, system-ui, -apple-system, sans-serif"
+    fontSize: "13px"
+---
+
+flowchart TB
+    User([User]) --> Frontend["index.html\nLive regex playground"]
+    APIClient([API Client]) --> API1["/api/v1/references.json\n37 cultural references"]
+    APIClient --> API2["/api/v1/music.json\nSongs + recommendations"]
+
+    subgraph App["Static Site (No Build Step)"]
+        Frontend --> Matcher["Live regex engine\nApplies all 37 patterns in real time"]
+        Frontend --> API1
+        Matcher --> Cards["Matching cards\nHighlighted in grid"]
+    end
+
+    subgraph DataLayer["Static JSON API (GitHub Pages)"]
+        API1
+        API2
+    end

@@ -168,6 +168,22 @@ No manual JSON editing required.
 
 ---
 
+## Architecture
+
+![Architecture](docs/architecture.svg)
+
+```
+references-api/
+├── index.html              # Playground + API docs
+├── api/
+│   └── v1/
+│       ├── references.json # 37 cultural references with regex triggers
+│       └── music.json      # Songs and recommendations
+└── cb-enerbot-private/     # Source Ruby bot (reference only, own .git)
+```
+
+---
+
 ## Running locally
 
 ```bash
