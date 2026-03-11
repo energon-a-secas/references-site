@@ -1,8 +1,8 @@
 {
   "meta": {
     "version": "1.0.0",
-    "generated": "2026-03-01",
-    "count": 38,
+    "generated": "2026-03-11",
+    "count": 40,
     "description": "Cultural references and memes powering the Enerbot Slack bot. Each entry carries the original regex trigger so any client can replicate the same pattern-matching logic.",
     "usage": "Reconstruct a RegExp from trigger.pattern + trigger.flags, then test user text against it. Multiple entries can match the same input.",
     "endpoints": {
@@ -997,6 +997,30 @@
       "language": "es",
       "tags": [
         "series"
+      ]
+    },
+    {
+      "id": "brand-recognition",
+      "label": "Brand Recognition",
+      "source": "Family Guy",
+      "trigger": {
+        "pattern": "(brand recognition)",
+        "flags": "i",
+        "keywords": [
+          "brand recognition"
+        ]
+      },
+      "media": [
+        {
+          "url": "https://www.youtube.com/watch?v=ePBxm3V2_0E&t=18s",
+          "type": "youtube",
+          "primary": true
+        }
+      ],
+      "language": "en",
+      "tags": [
+        "gijoe",
+        "family guy"
       ]
     }
   ]
