@@ -4,16 +4,19 @@
 # ── Playwright MCP (Claude Code browser automation — screenshots, logs) ───────
 .playwright-mcp/
 
-# ── Node (local tooling only — these projects have no npm dependencies) ───────
+# ── Playwright test artifacts ─────────────────────────────────────────────────
+test-results/
+playwright-report/
+blob-report/
+
+# ── Node ──────────────────────────────────────────────────────────────────────
 node_modules/
 npm-debug.log*
-
-# ── Secrets — never commit ────────────────────────────────────────────────────
-.env
-.env.*
+package-lock.json
 
 # ── Private bot source (separate git repo, reference only) ───────────────────
 cb-enerbot-private/
 
-# Claude AI guidance (maintained centrally in .claude/project-claudes/)
-CLAUDE.md
+# ── Secrets — never commit ────────────────────────────────────────────────────
+.env
+.env.*
