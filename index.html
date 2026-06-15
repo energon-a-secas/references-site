@@ -148,8 +148,7 @@
       line-height: 1.1; letter-spacing: -.02em; margin-bottom: 16px;
     }
     .neon-word {
-      background: linear-gradient(90deg, #f472b6, #c084fc, #818cf8);
-      -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+      color: #f9a8d4;
     }
     .hero-sub { font-size: 1rem; color: var(--text-secondary); max-width: 520px; margin: 0 auto 36px; line-height: 1.7; }
 
@@ -489,6 +488,7 @@
         id="matcher-input"
         class="matcher-input"
         type="text"
+        aria-label="Live regex matcher: type a phrase to test against all 37 patterns"
         placeholder="ya tu sabes / orden 66 / you won't learn anything / tengo miedo…"
         autocomplete="off"
         spellcheck="false"
@@ -953,9 +953,6 @@ function renderMusic(data) {
   }
 })();
 </script>
-  <footer class="info-footer">
-    Part of <a class="footer-link" href="https://neorgon.com/">Neorgon</a>
-  </footer>
 
 </body>
 </html>
