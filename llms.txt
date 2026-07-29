@@ -1,0 +1,12 @@
+# Reference Matrix
+
+> Enerbot Slack bot references, live regex, JSON API
+
+- Live: https://references.neorgon.com/
+- Part of the Neorgon tool suite (free, no signup, runs in your browser): https://neorgon.com/
+- Keywords: api, regex, json, enerbot
+
+## More Neorgon tools
+
+- [Neorgon hub](https://neorgon.com/): Browse and launch every tool from one page.
+- [Full suite index](https://neorgon.com/llms.txt): Machine-readable list of every Neorgon tool.
