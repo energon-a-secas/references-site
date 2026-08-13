@@ -2,8 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta http-equiv="X-Frame-Options" content="DENY">
-  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob: https://img.youtube.com https://*.giphy.com https://cdn.neorgon.org; frame-ancestors 'none'">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline' https://cdn.neorgon.org; img-src 'self' data: blob: https://img.youtube.com https://*.giphy.com https://cdn.neorgon.org">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Enerbot | Reference Matrix</title>
   <meta name="description" content="Browse the 37 cultural references and memes behind the Enerbot Slack bot. Live regex playground and JSON API, no auth required">
@@ -42,7 +41,9 @@
 
     :root {
       --bg:            #000912;
-      --font:          'Avenir Next', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      --font:          'Avenir Next', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+      --accent:        #f472b6;
+      --accent-bright: #f9a8d4;
       --text-primary:  #f0f4ff;
       --text-secondary:#8fa0c0;
       --text-muted:    rgba(143,160,192,.65);
@@ -348,13 +349,6 @@
     .submit-cta-btn:hover { background: rgba(244,114,182,.22); border-color: rgba(244,114,182,.55); }
 
     /* ── Footer ───────────────────────────────────────────────────────────── */
-    .site-footer {
-      text-align: center; padding: 20px 40px 32px;
-      color: rgba(255,255,255,.18); font-size: .78rem; line-height: 1.8;
-      border-top: 1px solid rgba(255,255,255,.04);
-    }
-    .site-footer a { color: rgba(255,255,255,.32); text-decoration: none; }
-    .site-footer a:hover { color: rgba(255,255,255,.6); }
 
     /* ── Loading state ────────────────────────────────────────────────────── */
     .loading-msg { text-align: center; padding: 60px 20px; color: var(--text-muted); font-size: .9rem; }
@@ -411,6 +405,8 @@
   <link rel="stylesheet" href="css/neorgon-themes.css">
   <link rel="stylesheet" href="https://cdn.neorgon.org/v1.0.0/header/season.css">
   <script defer src="js/neorgon-header.js"></script>
+    <link rel="stylesheet" href="css/neorgon-footer.css">
+    <script defer src="js/neorgon-footer.js"></script>
 </head>
 <body>
 
@@ -610,14 +606,11 @@ data = requests.<span class="fn">get</span>(
 
   </main>
 
-  <footer class="site-footer">
+  <footer class="neo-footer" data-footer-mode="minimal">
     Enerbot Reference Matrix ·
-    <a href="https://neorgon.com/">neorgon.com</a>
-    &nbsp;·&nbsp;
-    <a href="https://github.com/energon-a-secas/reference-site" target="_blank" rel="noopener noreferrer">GitHub</a>
-    &nbsp;·&nbsp;
-    <a href="/api/v1/references.json">references.json</a>
-    &nbsp;·&nbsp;
+    <a href="https://neorgon.com/">neorgon.com</a> ·
+    <a href="https://github.com/energon-a-secas/references-site" target="_blank" rel="noopener noreferrer">GitHub</a> ·
+    <a href="/api/v1/references.json">references.json</a> ·
     <a href="/api/v1/music.json">music.json</a>
   </footer>
 
