@@ -9,7 +9,7 @@ make serve    # Start dev server at http://localhost:8805
 make kill     # Kill the dev server
 ```
 
-`index.html` can also be opened directly in a browser — no server required since it's a single-file app with no ES modules.
+`index.html` can also be opened directly in a browser. No server required since it's a single-file app with no ES modules.
 
 ## Architecture
 
@@ -19,10 +19,10 @@ This is a static GitHub Pages site with two distinct roles: a **JSON API** and a
 
 The "API" is two plain JSON files with stable versioned URLs, no backend:
 
-- `api/v1/references.json` — 38 cultural references (README says 37; count has diverged). Each entry has an `id`, `label`, `source`, `trigger` (with `pattern`, `flags`, `keywords`), `media` array, `language`, and `tags`.
-- `api/v1/music.json` — Songs (with lyrics excerpts), dance video URLs, and music recommendations.
+- `api/v1/references.json`: 38 cultural references (README says 37; count has diverged). Each entry has an `id`, `label`, `source`, `trigger` (with `pattern`, `flags`, `keywords`), `media` array, `language`, and `tags`.
+- `api/v1/music.json`: Songs (with lyrics excerpts), dance video URLs, and music recommendations.
 
-**Critical detail:** `trigger.pattern` is raw Ruby regex source translated to JavaScript. Two entries intentionally have no `i` flag — they are case-sensitive originals. When adding new entries, preserve the original case sensitivity from the Ruby source.
+**Critical detail:** `trigger.pattern` is raw Ruby regex source translated to JavaScript. Two entries intentionally have no `i` flag. They are case-sensitive originals. When adding new entries, preserve the original case sensitivity from the Ruby source.
 
 ### Single-file Frontend (`index.html`)
 
@@ -37,7 +37,7 @@ Key JS behaviors:
 
 ### Source Data (`cb-enerbot-private/`)
 
-This is a read-only git submodule (separate `.git`, reference only — never modify). The original Ruby bot patterns live in `cb-enerbot-private/actions/cultural_references.rb`. That file now fetches from the live API URL (`https://references.neorgon.com/api/v1/references.json`) rather than hardcoding patterns — the JSON is the source of truth.
+This is a read-only git submodule (separate `.git`, reference only, never modify). The original Ruby bot patterns live in `cb-enerbot-private/actions/cultural_references.rb`. That file now fetches from the live API URL (`https://references.neorgon.com/api/v1/references.json`) rather than hardcoding patterns. The JSON is the source of truth.
 
 When adding or updating a reference entry in `references.json`, the Ruby bot automatically picks it up on next load (it caches via `@references ||=`).
 
@@ -66,4 +66,4 @@ Multiple media entries per reference are supported; the Ruby bot picks one at ra
 
 ## Deployment
 
-Served via GitHub Pages — pushing to `main` deploys automatically. The `CNAME` file sets the custom domain to `references.neorgon.com`. No build pipeline.
+Served via GitHub Pages: pushing to `main` deploys automatically. The `CNAME` file sets the custom domain to `references.neorgon.com`. No build pipeline.
