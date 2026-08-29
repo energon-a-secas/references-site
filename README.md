@@ -36,7 +36,7 @@ A static JSON API and live playground for every cultural reference and meme in t
 
 ## What it does
 
-The original bot identifies meme-worthy phrases by running incoming Slack messages through a table of regex patterns. Each match returns a video link or GIF. This repo exposes that entire reference table as a documented, versioned JSON API — and adds a browser playground where you can type anything and watch the patterns fire in real time.
+The original bot identifies meme-worthy phrases by running incoming Slack messages through a table of regex patterns. Each match returns a video link or GIF. This repo exposes that entire reference table as a documented, versioned JSON API, and adds a browser playground where you can type anything and watch the patterns fire in real time.
 
 ---
 
@@ -78,7 +78,7 @@ Both are plain JSON files served from GitHub Pages. No auth. No rate limits. COR
 | `id` | string | Stable slug identifier |
 | `label` | string | Human-readable reference name |
 | `source` | string | Show, movie, or origin of the reference |
-| `trigger.pattern` | string | Raw regex source — pass directly to `new RegExp(pattern, flags)` |
+| `trigger.pattern` | string | Raw regex source: pass directly to `new RegExp(pattern, flags)` |
 | `trigger.flags` | string | Regex flags (`"i"` = case-insensitive, `""` = none) |
 | `trigger.keywords` | string[] | Readable list of phrases that trigger this entry |
 | `media` | array | Media objects with `url`, `type` (`youtube`/`gif`), and `primary` flag |
@@ -201,7 +201,7 @@ Or open `index.html` directly in a browser.
 - Deep space background (`#000912`)
 - Animated starfield (180 stars, canvas)
 - Per-source neon accent colors
-- Live regex playground — input triggers real-time match highlighting across the entire card grid
+- Live regex playground: input triggers real-time match highlighting across the entire card grid
 - API docs with syntax-highlighted code examples
 - `prefers-reduced-motion` respected
 
@@ -209,7 +209,7 @@ Or open `index.html` directly in a browser.
 
 ## Tech
 
-Pure HTML + CSS + JavaScript. No frameworks, no build step. Data is a static JSON file — the "API" is just a well-structured file with a stable URL. Pattern matching uses the browser's native `RegExp`.
+Pure HTML + CSS + JavaScript. No frameworks, no build step. Data is a static JSON file. The "API" is just a well-structured file with a stable URL. Pattern matching uses the browser's native `RegExp`.
 
 ---
 
