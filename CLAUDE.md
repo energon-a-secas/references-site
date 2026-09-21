@@ -58,7 +58,7 @@ When adding or updating a reference entry in `references.json`, the Ruby bot aut
   ],
   "language": "es|en|es/en",
   "tags": ["tag1", "tag2"],
-  "notes": "optional — use for case-sensitivity quirks"
+  "notes": "optional: use for case-sensitivity quirks"
 }
 ```
 
