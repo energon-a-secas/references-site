@@ -6,9 +6,27 @@ PORT = 8805
 .PHONY: help
 help:
 	@echo ""
-	@echo "  make serve    Start dev server → http://localhost:$(PORT)"
-	@echo "  make kill     Kill this project's HTTP server"
+	@echo "  make serve      Start dev server → http://localhost:$(PORT)"
+	@echo "  make kill       Kill this project's HTTP server"
+	@echo "  make catalogue  Validate api/v2/catalogue.json and rebuild api/v1/references.json"
+	@echo "  make uploads    Refresh the Meme Vault uploads in the catalogue from memes-site"
+	@echo "  make check      Fail if either JSON file is out of date"
+	@echo "  make test       Run the catalogue tests"
 	@echo ""
+
+# ── Catalogue ─────────────────────────────────────────────────────────────────
+.PHONY: catalogue uploads check test
+catalogue:
+	@node scripts/catalogue.mjs
+
+uploads:
+	@node scripts/import-uploads.mjs
+
+check:
+	@node scripts/catalogue.mjs --check
+
+test:
+	@node --test tests/*.test.mjs
 
 # ── Dev server ────────────────────────────────────────────────────────────────
 .PHONY: serve

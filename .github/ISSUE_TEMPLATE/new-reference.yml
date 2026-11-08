@@ -42,7 +42,7 @@ body:
     id: regex
     attributes:
       label: Custom regex
-      description: Optional — leave blank and a pattern will be auto-generated from your trigger phrases above.
+      description: Optional. Leave blank and a pattern will be generated from your trigger phrases above.
       placeholder: "(orden 66|execute order 66)"
 
   - type: input

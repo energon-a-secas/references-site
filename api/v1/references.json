@@ -1,15 +1,17 @@
 {
   "meta": {
     "version": "1.0.0",
-    "generated": "2026-03-11",
+    "generated": "2026-11-08",
     "count": 40,
     "description": "Cultural references and memes powering the Enerbot Slack bot. Each entry carries the original regex trigger so any client can replicate the same pattern-matching logic.",
     "usage": "Reconstruct a RegExp from trigger.pattern + trigger.flags, then test user text against it. Multiple entries can match the same input.",
     "endpoints": {
       "references": "https://references.neorgon.com/api/v1/references.json",
-      "music": "https://references.neorgon.com/api/v1/music.json"
+      "music": "https://references.neorgon.com/api/v1/music.json",
+      "catalogue": "https://references.neorgon.com/api/v2/catalogue.json"
     },
-    "source": "https://github.com/energon-a-secas/references-api"
+    "source": "https://github.com/energon-a-secas/references-site",
+    "generatedFrom": "api/v2/catalogue.json"
   },
   "references": [
     {
@@ -644,7 +646,7 @@
         "te-lo-resumo",
         "meme"
       ],
-      "notes": "Case-sensitive — triggers only on lowercase 'no puedo'"
+      "notes": "Case-sensitive: triggers only on lowercase 'no puedo'"
     },
     {
       "id": "risa-victoriosa",
@@ -771,7 +773,7 @@
         "simpsons",
         "dubbed"
       ],
-      "notes": "Accepts deliberate misspelling 'malir sal' — a reference to the Simpsons clip where Homer mispronounces it"
+      "notes": "Accepts deliberate misspelling 'malir sal', a reference to the Simpsons clip where Homer mispronounces it"
     },
     {
       "id": "tengo-miedo",
@@ -949,7 +951,7 @@
         "tv-show",
         "family-guy"
       ],
-      "notes": "Case-sensitive — no 'i' flag in the original Ruby regex"
+      "notes": "Case-sensitive: no 'i' flag in the original Ruby regex"
     },
     {
       "id": "addicted-to-nasal-spray",
