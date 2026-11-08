@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://gc.zgo.at https://static.cloudflareinsights.com; style-src 'self' 'unsafe-inline' https://cdn.neorgon.org; img-src 'self' data: blob: https://img.youtube.com https://*.giphy.com https://cdn.neorgon.org https://neorgon.goatcounter.com; connect-src 'self' https://neorgon.goatcounter.com https://cloudflareinsights.com">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://gc.zgo.at https://static.cloudflareinsights.com; style-src 'self' 'unsafe-inline' https://cdn.neorgon.org; img-src 'self' data: blob: https://img.youtube.com https://*.giphy.com https://memes.neorgon.com https://polite-jellyfish-291.convex.cloud https://cdn.neorgon.org https://neorgon.goatcounter.com; connect-src 'self' https://neorgon.goatcounter.com https://cloudflareinsights.com">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="icon" type="image/svg+xml" href="/favicon.svg">
   <link rel="icon" type="image/x-icon" href="/favicon.ico" sizes="16x16 32x32 48x48">
@@ -11,15 +11,15 @@
   <link rel="manifest" href="/site.webmanifest">
   <meta name="neo-mark" content="on">
   <title>Enerbot | Reference Matrix</title>
-  <meta name="description" content="Browse the 37 cultural references and memes behind the Enerbot Slack bot. Live regex playground and JSON API, no auth required">
+  <meta name="description" content="Every cultural reference and meme the Energon community uses: the Enerbot Slack bot's regex triggers and the Meme Vault's images. Live regex playground and JSON API, no auth required">
   <meta property="og:title" content="Enerbot Reference Matrix">
-  <meta property="og:description" content="The 37 cultural references behind Enerbot, with live regex playground and JSON API">
+  <meta property="og:description" content="The references behind Enerbot and the Meme Vault's memes, with a live regex playground and a JSON API">
   <meta property="og:type" content="website">
   <meta property="og:url" content="https://references.neorgon.com/">
   <meta property="og:site_name" content="Neorgon">
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="Enerbot Reference Matrix">
-  <meta name="twitter:description" content="The 37 cultural references behind Enerbot, with live regex playground and JSON API">
+  <meta name="twitter:description" content="The references behind Enerbot and the Meme Vault's memes, with a live regex playground and a JSON API">
   <meta name="twitter:image" content="https://references.neorgon.com/og-preview.jpg">
   <meta name="robots" content="index, follow">
   <link rel="canonical" href="https://references.neorgon.com/">
@@ -33,7 +33,7 @@
     "@context": "https://schema.org",
     "@type": "WebApplication",
     "name": "Enerbot Reference Matrix",
-    "description": "Browse the 37 cultural references behind the Enerbot Slack bot. Live regex playground and JSON API",
+    "description": "Every cultural reference and meme the Energon community uses, with the Enerbot Slack bot's regex triggers. Live regex playground and JSON API",
     "url": "https://references.neorgon.com/",
     "applicationCategory": "DeveloperApplication",
     "operatingSystem": "Any",
@@ -176,6 +176,19 @@
     }
     .filter-chip:hover { color: var(--text-primary); border-color: var(--border-glow); background: var(--surface-hover); }
     .filter-chip.active { color: var(--chip-color, #f472b6); border-color: var(--chip-color, #f472b6); background: color-mix(in srgb, var(--chip-color, #f472b6) 10%, transparent); }
+    button.filter-chip, .kind-btn { font-family: inherit; line-height: inherit; }
+    .filter-chip:focus-visible, .kind-btn:focus-visible { outline: 2px solid var(--accent-bright); outline-offset: 2px; }
+
+    /* ── Kind toggle ──────────────────────────────────────────────────────── */
+    .kind-row { display: inline-flex; gap: 4px; padding: 4px; margin-bottom: 14px; border: 1px solid var(--border); border-radius: 12px; background: var(--surface); }
+    .kind-btn {
+      font-size: .8rem; font-weight: 600; padding: 7px 14px; border-radius: 9px; cursor: pointer;
+      border: 1px solid transparent; background: none; color: var(--text-secondary);
+      transition: color .15s, background .15s, border-color .15s;
+    }
+    .kind-btn:hover { color: var(--text-primary); background: var(--surface-hover); }
+    .kind-btn.active { color: var(--accent-bright); border-color: rgba(244,114,182,.35); background: rgba(244,114,182,.1); }
+    .kind-count { font-weight: 500; color: var(--text-muted); font-variant-numeric: tabular-nums; margin-left: 2px; }
 
     /* ── Reference grid ───────────────────────────────────────────────────── */
     .ref-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 14px; }
@@ -268,6 +281,13 @@
     .ref-card:hover .card-thumb-play { opacity: 1; }
     .card-thumb-play svg { filter: drop-shadow(0 2px 6px rgba(0,0,0,.5)); }
     .card-thumb img.thumb-error { display: none; }
+    /* A meme is the whole picture, so it is shown whole rather than cropped to 16:9. */
+    .card-thumb.meme-thumb { aspect-ratio: 4 / 3; }
+    .card-thumb.meme-thumb img { object-fit: contain; }
+    .credit-badge { font-size: .65rem; color: var(--text-muted); margin-left: auto; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; max-width: 55%; }
+    .media-badge.image-badge { border-color: rgba(244,63,94,.22); color: #fb7185; background: rgba(244,63,94,.07); }
+    .matcher-more { font-size: .76rem; color: var(--text-muted); padding: 6px 2px 0; }
+    .submit-cta-desc a { color: var(--accent-bright); }
     .card-thumb.thumb-hidden { display: none; }
 
     .hidden { display: none !important; }
@@ -439,8 +459,8 @@
       <nav class="header-actions">
         <a data-keep-mobile class="nav-link" href="#music">Music</a>
         <a data-keep-mobile class="nav-link" href="#api-docs">API Docs</a>
-        <a class="nav-link" href="https://github.com/energon-a-secas/reference-site/issues/new?template=new-reference.yml" target="_blank" rel="noopener noreferrer" style="color:#f9a8d4;border-color:rgba(244,114,182,.2)">Submit</a>
-        <a class="nav-link" href="https://github.com/energon-a-secas/reference-site" target="_blank" rel="noopener noreferrer">GitHub</a>
+        <a class="nav-link" href="https://github.com/energon-a-secas/references-site/issues/new?template=new-reference.yml" target="_blank" rel="noopener noreferrer" style="color:#f9a8d4;border-color:rgba(244,114,182,.2)">Submit</a>
+        <a class="nav-link" href="https://github.com/energon-a-secas/references-site" target="_blank" rel="noopener noreferrer">GitHub</a>
     
       </nav>
       <a class="header-home" href="https://neorgon.com/" title="neorgon.com" aria-label="Neorgon home">
@@ -461,7 +481,7 @@
   <section class="hero">
     <div class="hero-badge">
       <span class="badge-dot"></span>
-      37 References · Live Regex · Static JSON API
+      <span id="hero-counts">References and memes</span> · Live Regex · Static JSON API
     </div>
     <h1 class="hero-heading">
       The <span class="neon-word">regex patterns</span><br>behind Enerbot
@@ -474,12 +494,12 @@
         id="matcher-input"
         class="matcher-input"
         type="text"
-        aria-label="Live regex matcher: type a phrase to test against all 37 patterns"
+        aria-label="Live regex matcher: type a phrase to test it against every pattern and search the memes"
         placeholder="ya tu sabes / orden 66 / you won't learn anything / tengo miedo…"
         autocomplete="off"
         spellcheck="false"
       >
-      <div class="matcher-status" id="matcher-status">Type a phrase to test it against all 37 patterns.</div>
+      <div class="matcher-status" id="matcher-status">Type a phrase to test it against every pattern.</div>
       <div class="matcher-results" id="matcher-results"></div>
     </div>
   </section>
@@ -488,25 +508,29 @@
 
     <!-- Reference browser -->
     <div class="section-head">
-      <span class="section-label">All References</span>
+      <span class="section-label">The catalogue</span>
       <span class="section-count" id="grid-count"></span>
     </div>
 
-    <div class="filter-row" id="filter-row">
-      <span class="filter-chip active" data-source="all" style="--chip-color:#f472b6">All</span>
+    <div class="kind-row" id="kind-row" role="group" aria-label="Show">
+      <button type="button" class="kind-btn active" data-kind="all" aria-pressed="true">All <span class="kind-count" data-count="all"></span></button>
+      <button type="button" class="kind-btn" data-kind="reference" aria-pressed="false">References <span class="kind-count" data-count="reference"></span></button>
+      <button type="button" class="kind-btn" data-kind="meme" aria-pressed="false">Memes <span class="kind-count" data-count="meme"></span></button>
     </div>
 
+    <div class="filter-row" id="filter-row" role="group" aria-label="Filter by source or category"></div>
+
     <div class="ref-grid" id="ref-grid">
-      <div class="loading-msg">Loading references…</div>
+      <div class="loading-msg">Loading the catalogue…</div>
     </div>
 
     <!-- Submit CTA -->
     <div class="submit-cta">
       <div class="submit-cta-copy">
         <span class="submit-cta-title">Know a reference we're missing?</span>
-        <span class="submit-cta-desc">Submit one via GitHub and get credited as a contributor once it's merged.</span>
+        <span class="submit-cta-desc">Submit one via GitHub and get credited as a contributor once it's merged. Memes go up on the <a href="https://memes.neorgon.com/">Meme Vault</a>.</span>
       </div>
-      <a class="submit-cta-btn" href="https://github.com/energon-a-secas/reference-site/issues/new?template=new-reference.yml" target="_blank" rel="noopener noreferrer">
+      <a class="submit-cta-btn" href="https://github.com/energon-a-secas/references-site/issues/new?template=new-reference.yml" target="_blank" rel="noopener noreferrer">
         Submit a reference
         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17L17 7M7 7h10v10"/></svg>
       </a>
@@ -539,8 +563,12 @@
 
         <div class="docs-card">
           <div class="docs-card-title">Endpoints</div>
-          <div class="docs-card-sub">Two static JSON files on GitHub Pages. No auth, no rate limits, CORS-open.</div>
+          <div class="docs-card-sub">Static JSON files on GitHub Pages. No auth, no rate limits, CORS-open. The catalogue holds everything; references.json is built from it with only the entries the bot answers to.</div>
           <div>
+            <div class="endpoint-row" style="margin-bottom:10px">
+              <span class="method-badge">GET</span>
+              <span class="endpoint-url">https://references.neorgon.com/api/v2/catalogue.json</span>
+            </div>
             <div class="endpoint-row" style="margin-bottom:10px">
               <span class="method-badge">GET</span>
               <span class="endpoint-url">https://references.neorgon.com/api/v1/references.json</span>
@@ -553,7 +581,26 @@
         </div>
 
         <div class="docs-card">
-          <div class="docs-card-title">Reference schema</div>
+          <div class="docs-card-title">Catalogue entry, a meme</div>
+          <div class="docs-card-sub">Every entry is a reference and <code>kind</code> says which. <code>origin</code> is where it came from: enerbot, submission, vault (a Meme Vault file) or upload (a Meme Vault upload, credited as its uploader chose). Entries with a <code>trigger</code> are the ones the bot answers with.</div>
+          <div class="code-block"><span class="kw">{</span>
+  <span class="str">"id"</span>:       <span class="str">"canon-event"</span>,
+  <span class="str">"kind"</span>:     <span class="str">"meme"</span>,
+  <span class="str">"label"</span>:    <span class="str">"Canon event"</span>,
+  <span class="str">"category"</span>: <span class="str">"templates"</span>,
+  <span class="str">"media"</span>: [<span class="kw">{</span>
+    <span class="str">"url"</span>:     <span class="str">"https://memes.neorgon.com/…"</span>,
+    <span class="str">"type"</span>:    <span class="str">"image"</span>,
+    <span class="str">"primary"</span>: <span class="kw">true</span>
+  <span class="kw">}</span>],
+  <span class="str">"tags"</span>:     [],
+  <span class="str">"origin"</span>:   <span class="str">"vault"</span>,
+  <span class="str">"added"</span>:    <span class="str">"2024-08-26"</span>
+<span class="kw">}</span></div>
+        </div>
+
+        <div class="docs-card">
+          <div class="docs-card-title">Reference schema, v1</div>
           <div class="code-block"><span class="kw">{</span>
   <span class="str">"id"</span>:      <span class="str">"orden-66"</span>,
   <span class="str">"label"</span>:   <span class="str">"Orden 66"</span>,
@@ -625,6 +672,7 @@ data = requests.<span class="fn">get</span>(
     Enerbot Reference Matrix ·
     <a href="https://neorgon.com/">neorgon.com</a> ·
     <a href="https://github.com/energon-a-secas/references-site" target="_blank" rel="noopener noreferrer">GitHub</a> ·
+    <a href="/api/v2/catalogue.json">catalogue.json</a> ·
     <a href="/api/v1/references.json">references.json</a> ·
     <a href="/api/v1/music.json">music.json</a>
   </footer>
@@ -692,6 +740,25 @@ function getConfig(source) {
   return DEFAULT_CONFIG;
 }
 
+/* ── Kinds ─────────────────────────────────────────────────────────────────── */
+// Memes share one accent: their category is a facet, not a show with its own colour.
+const MEME_CONFIG = { icon: '🖼️', accent: '#fb7185', glow: 'rgba(244,63,94,.3)', border: 'rgba(244,63,94,.4)' };
+
+function configFor(entry) {
+  return entry.kind === 'meme' ? MEME_CONFIG : getConfig(entry.source || '');
+}
+
+function categoryName(slug) {
+  const words = slug.replace(/[-_]+/g, ' ');
+  return words.charAt(0).toUpperCase() + words.slice(1);
+}
+
+/* A reference is grouped by its source (a show, a film), a meme by its category. */
+const facetOf = (entry) => (entry.kind === 'meme' ? entry.category : entry.source);
+const facetLabel = (entry) => (entry.kind === 'meme' ? categoryName(entry.category) : entry.source);
+const primaryOf = (entry) => entry.media.find((item) => item.primary) || entry.media[0];
+const fold = (text) => text.normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase();
+
 /* ── Arrow SVG ─────────────────────────────────────────────────────────────── */
 const ARROW_SVG = `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17L17 7M7 7h10v10"/></svg>`;
 const PLAY_SVG = `<svg width="48" height="48" viewBox="0 0 48 48" fill="none"><circle cx="24" cy="24" r="24" fill="rgba(0,0,0,.55)"/><path d="M19 15l14 9-14 9V15z" fill="#fff"/></svg>`;
@@ -702,69 +769,76 @@ function extractYouTubeId(url) {
   return m ? m[1] : null;
 }
 
-function buildThumbHtml(ref) {
-  const primary = ref.media[0];
+function buildThumbHtml(entry) {
+  const primary = primaryOf(entry);
   if (primary.type === 'youtube') {
     const vid = extractYouTubeId(primary.url);
     if (!vid) return '';
     return `<a class="card-thumb" href="${escHtml(primary.url)}" target="_blank" rel="noopener noreferrer">
-      <img src="https://img.youtube.com/vi/${vid}/mqdefault.jpg" alt="${escHtml(ref.label)}" loading="lazy" onerror="this.classList.add('thumb-error');this.parentElement.classList.add('thumb-hidden')">
+      <img src="https://img.youtube.com/vi/${vid}/mqdefault.jpg" alt="${escHtml(entry.label)}" loading="lazy">
       <div class="card-thumb-play">${PLAY_SVG}</div>
     </a>`;
   }
-  if (primary.type === 'gif' || primary.type === 'image') {
-    return `<a class="card-thumb" href="${escHtml(primary.url)}" target="_blank" rel="noopener noreferrer">
-      <img src="${escHtml(primary.url)}" alt="${escHtml(ref.label)}" loading="lazy" onerror="this.classList.add('thumb-error');this.parentElement.classList.add('thumb-hidden')">
+  return `<a class="card-thumb${entry.kind === 'meme' ? ' meme-thumb' : ''}" href="${escHtml(primary.url)}" target="_blank" rel="noopener noreferrer">
+      <img src="${escHtml(primary.url)}" alt="${escHtml(entry.label)}" loading="lazy" decoding="async">
     </a>`;
-  }
-  return '';
 }
 
 /* ── Render helpers ────────────────────────────────────────────────────────── */
-function mediaTypeLabel(ref) {
-  const primary = ref.media[0];
-  return primary.type === 'gif' ? 'GIF' : 'YouTube';
+function mediaBadge(entry) {
+  const type = primaryOf(entry).type;
+  if (type === 'gif') return '<span class="media-badge gif-badge">GIF</span>';
+  if (type === 'image') return '<span class="media-badge image-badge">Image</span>';
+  return '<span class="media-badge">YouTube</span>';
 }
 
-function buildRefCard(ref, isMatch = false) {
-  const cfg = getConfig(ref.source);
-  const mediaLabel = mediaTypeLabel(ref);
-  const isGif = ref.media[0].type === 'gif';
-  const extraMedia = ref.media.length > 1 ? ` <span style="color:var(--text-muted);font-size:.65rem">+${ref.media.length - 1} alt</span>` : '';
-  const noteHtml = ref.notes
-    ? `<div style="font-size:.68rem;color:var(--text-muted);font-style:italic;border-top:1px solid rgba(255,255,255,.06);padding-top:8px">${ref.notes}</div>`
-    : '';
-  const keywordsHtml = ref.trigger.keywords
-    .map(k => `<span class="keyword-tag">${k}</span>`)
-    .join('');
+function creditHtml(entry) {
+  if (entry.credit) return `<span class="credit-badge">by ${escHtml(entry.credit)}</span>`;
+  if (entry.origin === 'vault') return '<span class="credit-badge">Meme Vault</span>';
+  return '';
+}
 
-  const thumbHtml = buildThumbHtml(ref);
+/* Every value is escaped: upload names are whatever the uploader typed. */
+function buildCard(entry, isMatch = false) {
+  const cfg = configFor(entry);
+  const primary = primaryOf(entry);
+  const extraMedia = entry.media.length > 1 ? ` <span style="color:var(--text-muted);font-size:.65rem">+${entry.media.length - 1} alt</span>` : '';
+  const triggerHtml = entry.trigger
+    ? `<div class="card-trigger">
+      <span style="color:var(--text-muted)">/</span><span class="trigger-pattern">${escHtml(entry.trigger.pattern)}</span><span style="color:var(--text-muted)">/</span><span class="trigger-flags">${escHtml(entry.trigger.flags || '')}</span>
+    </div>
+    <div class="card-keywords">${entry.trigger.keywords.map((k) => `<span class="keyword-tag">${escHtml(k)}</span>`).join('')}</div>`
+    : '';
+  const tagsHtml = !entry.trigger && entry.tags.length
+    ? `<div class="card-keywords">${entry.tags.map((t) => `<span class="keyword-tag">#${escHtml(t)}</span>`).join('')}</div>`
+    : '';
+  const noteHtml = entry.notes
+    ? `<div style="font-size:.68rem;color:var(--text-muted);font-style:italic;border-top:1px solid rgba(255,255,255,.06);padding-top:8px">${escHtml(entry.notes)}</div>`
+    : '';
+  const langHtml = entry.language ? `<span class="lang-badge">${escHtml(entry.language)}</span>` : '';
 
   return `
-<div class="ref-card${isMatch ? ' is-match' : ''}"
-     data-source="${ref.source}" data-id="${ref.id}"
+<div class="ref-card${isMatch ? ' is-match' : ''}" data-id="${escHtml(entry.id)}"
      style="--card-glow:${cfg.glow};--card-border:${cfg.border};--card-accent:${cfg.accent}">
   <div class="card-inner">
     <div class="card-top">
       <div class="card-icon">${cfg.icon}</div>
       <div class="card-actions">
-        <a class="card-btn" href="${ref.media[0].url}" target="_blank" rel="noopener noreferrer">
+        <a class="card-btn" href="${escHtml(primary.url)}" target="_blank" rel="noopener noreferrer">
           ${ARROW_SVG} Open
         </a>
       </div>
     </div>
-    ${thumbHtml}
+    ${buildThumbHtml(entry)}
     <div>
-      <div class="card-source">${ref.source}</div>
-      <div class="card-label">${ref.label}</div>
+      <div class="card-source">${escHtml(facetLabel(entry))}</div>
+      <div class="card-label">${escHtml(entry.label)}</div>
     </div>
-    <div class="card-trigger">
-      <span style="color:var(--text-muted)">/</span><span class="trigger-pattern">${escHtml(ref.trigger.pattern)}</span><span style="color:var(--text-muted)">/</span><span class="trigger-flags">${ref.trigger.flags || ''}</span>
-    </div>
-    <div class="card-keywords">${keywordsHtml}</div>
+    ${triggerHtml}${tagsHtml}
     <div class="card-footer">
-      <span class="lang-badge">${ref.language}</span>
-      <span class="media-badge${isGif ? ' gif-badge' : ''}">${mediaLabel}${extraMedia}</span>
+      ${langHtml}
+      ${mediaBadge(entry)}${extraMedia}
+      ${creditHtml(entry)}
     </div>
     ${noteHtml}
   </div>
@@ -772,30 +846,39 @@ function buildRefCard(ref, isMatch = false) {
 }
 
 function escHtml(s) {
-  return s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+  return String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;').replace(/'/g, '&#39;');
 }
 
 /* ── State ─────────────────────────────────────────────────────────────────── */
-let ALL_REFS = [];
-let activeSource = 'all';
+let ALL = [];
+let activeKind = 'all';
+let activeFacet = 'all';
+const MATCH_LIST_LIMIT = 12;
 
 /* ── Matching ──────────────────────────────────────────────────────────────── */
-function matchAll(text) {
-  if (!text.trim()) return [];
-  const q = text.trim().toLowerCase();
-  return ALL_REFS.filter(ref => {
-    // 1. Full regex — exact bot behaviour
-    try {
-      if (new RegExp(ref.trigger.pattern, ref.trigger.flags).test(text)) return true;
-    } catch (_) {}
-    // 2. Substring search across keywords, label, source, tags, notes
-    if (ref.trigger.keywords.some(k => k.toLowerCase().includes(q))) return true;
-    if (ref.label.toLowerCase().includes(q)) return true;
-    if (ref.source.toLowerCase().includes(q)) return true;
-    if (ref.tags && ref.tags.some(t => t.toLowerCase().includes(q))) return true;
-    if (ref.notes && ref.notes.toLowerCase().includes(q)) return true;
+// 1. The regex, exactly as the bot runs it. 2. A plain search across the words
+// on every entry, memes included, accents folded.
+function regexFires(entry, text) {
+  if (!entry.trigger) return false;
+  try {
+    return new RegExp(entry.trigger.pattern, entry.trigger.flags).test(text);
+  } catch (_) {
     return false;
-  });
+  }
+}
+
+function searchHits(entry, q) {
+  const words = [entry.label, entry.source, entry.category, entry.credit, entry.notes, ...(entry.tags || []), ...(entry.trigger ? entry.trigger.keywords : [])];
+  return words.some((value) => value && fold(value).includes(q));
+}
+
+function matchAll(text) {
+  const raw = text.trim();
+  if (!raw) return { fires: [], found: [] };
+  const q = fold(raw);
+  const fires = ALL.filter((entry) => regexFires(entry, text));
+  const fired = new Set(fires.map((entry) => entry.id));
+  return { fires, found: ALL.filter((entry) => !fired.has(entry.id) && searchHits(entry, q)) };
 }
 
 /* ── Live matcher UI ───────────────────────────────────────────────────────── */
@@ -803,21 +886,39 @@ const matcherInput   = document.getElementById('matcher-input');
 const matcherStatus  = document.getElementById('matcher-status');
 const matcherResults = document.getElementById('matcher-results');
 
+function idleStatus() {
+  const patterns = ALL.filter((entry) => entry.trigger).length;
+  const memes = ALL.filter((entry) => entry.kind === 'meme').length;
+  return `Type a phrase to test it against all ${patterns} patterns, or search ${memes} memes.`;
+}
+
+function matchCard(entry) {
+  const cfg = configFor(entry);
+  return `
+<a class="match-card" href="${escHtml(primaryOf(entry).url)}" target="_blank" rel="noopener noreferrer"
+   style="border-color:${cfg.border};--card-accent:${cfg.accent}">
+  <div class="match-icon">${cfg.icon}</div>
+  <div class="match-body">
+    <div class="match-label">${escHtml(entry.label)}</div>
+    <div class="match-source">${escHtml(facetLabel(entry))}</div>
+  </div>
+  <div class="match-arrow">${ARROW_SVG}</div>
+</a>`;
+}
+
 function updateMatcher() {
   const text = matcherInput.value;
-  const matches = matchAll(text);
-  const grid = document.getElementById('ref-grid');
+  const { fires, found } = matchAll(text);
+  const matches = [...fires, ...found];
+  const ids = new Set(matches.map((entry) => entry.id));
 
   /* Highlight matched cards in the grid */
-  grid.querySelectorAll('.ref-card').forEach(card => {
-    const ref = ALL_REFS.find(r => r.id === card.dataset.id);
-    if (!ref) return;
-    const isM = matches.some(m => m.id === ref.id);
-    card.classList.toggle('is-match', isM);
+  document.querySelectorAll('#ref-grid .ref-card').forEach((card) => {
+    card.classList.toggle('is-match', ids.has(card.dataset.id));
   });
 
   if (!text.trim()) {
-    matcherStatus.innerHTML = 'Type a phrase to test it against all 37 patterns.';
+    matcherStatus.textContent = idleStatus();
     matcherResults.innerHTML = '';
     return;
   }
@@ -828,20 +929,15 @@ function updateMatcher() {
     return;
   }
 
-  matcherStatus.innerHTML = `<span class="match-count">${matches.length}</span> pattern${matches.length > 1 ? 's' : ''} matched, highlighted in the grid below`;
-  matcherResults.innerHTML = matches.map(ref => {
-    const cfg = getConfig(ref.source);
-    return `
-<a class="match-card" href="${ref.media[0].url}" target="_blank" rel="noopener noreferrer"
-   style="border-color:${cfg.border};--card-accent:${cfg.accent}">
-  <div class="match-icon">${cfg.icon}</div>
-  <div class="match-body">
-    <div class="match-label">${ref.label}</div>
-    <div class="match-source">${ref.source}</div>
-  </div>
-  <div class="match-arrow">${ARROW_SVG}</div>
-</a>`;
-  }).join('');
+  const fired = fires.length
+    ? `<span class="match-count">${fires.length}</span> pattern${fires.length > 1 ? 's fire' : ' fires'}`
+    : '';
+  const more = !found.length ? ''
+    : fires.length ? `${found.length} more match${found.length > 1 ? 'es' : ''}`
+    : `<span class="match-count">${found.length}</span> match${found.length > 1 ? 'es' : ''}`;
+  matcherStatus.innerHTML = `${[fired, more].filter(Boolean).join(', ')}, highlighted in the grid below`;
+  matcherResults.innerHTML = matches.slice(0, MATCH_LIST_LIMIT).map(matchCard).join('')
+    + (matches.length > MATCH_LIST_LIMIT ? `<div class="matcher-more">and ${matches.length - MATCH_LIST_LIMIT} more in the grid below</div>` : '');
 }
 
 let debounceTimer;
@@ -851,43 +947,81 @@ matcherInput.addEventListener('input', () => {
 });
 
 /* ── Grid rendering ────────────────────────────────────────────────────────── */
+function visibleEntries() {
+  return ALL.filter((entry) => (activeKind === 'all' || entry.kind === activeKind) && (activeFacet === 'all' || facetOf(entry) === activeFacet));
+}
+
 function renderGrid() {
   const grid = document.getElementById('ref-grid');
-  const count = document.getElementById('grid-count');
-  const filtered = activeSource === 'all'
-    ? ALL_REFS
-    : ALL_REFS.filter(r => r.source === activeSource);
-
-  count.textContent = `${filtered.length} of ${ALL_REFS.length}`;
-  grid.innerHTML = filtered.map(ref => buildRefCard(ref)).join('');
+  const list = visibleEntries();
+  document.getElementById('grid-count').textContent = `${list.length} of ${ALL.length}`;
+  grid.innerHTML = list.length ? list.map((entry) => buildCard(entry)).join('') : '<div class="loading-msg">Nothing here yet.</div>';
 
   /* Re-apply matches if input has text */
   if (matcherInput.value.trim()) updateMatcher();
 }
 
-/* ── Filter chips ──────────────────────────────────────────────────────────── */
+/* A thumbnail that fails to load folds away instead of showing a broken image. */
+document.getElementById('ref-grid').addEventListener('error', (event) => {
+  const img = event.target;
+  if (!(img instanceof HTMLImageElement)) return;
+  img.classList.add('thumb-error');
+  const thumb = img.closest('.card-thumb');
+  if (thumb) thumb.classList.add('thumb-hidden');
+}, true);
+
+/* ── Kind toggle and facet chips ───────────────────────────────────────────── */
+function chip(value, label, color) {
+  const button = document.createElement('button');
+  button.type = 'button';
+  button.className = `filter-chip${value === activeFacet ? ' active' : ''}`;
+  button.dataset.facet = value;
+  button.setAttribute('aria-pressed', String(value === activeFacet));
+  button.style.setProperty('--chip-color', color);
+  button.textContent = label;
+  return button;
+}
+
 function buildFilterChips() {
   const row = document.getElementById('filter-row');
-  const sources = [...new Set(ALL_REFS.map(r => r.source))].sort();
+  const facets = new Map();
+  for (const entry of ALL) {
+    if (activeKind !== 'all' && entry.kind !== activeKind) continue;
+    const value = facetOf(entry);
+    if (value && !facets.has(value)) facets.set(value, { value, label: facetLabel(entry), kind: entry.kind, accent: configFor(entry).accent });
+  }
+  // Sources first, then categories, each alphabetical.
+  const sorted = [...facets.values()].sort((a, b) => (a.kind === b.kind ? a.label.localeCompare(b.label) : a.kind === 'reference' ? -1 : 1));
+  row.replaceChildren(chip('all', 'All', '#f472b6'), ...sorted.map((facet) => chip(facet.value, facet.label, facet.accent)));
+}
 
-  sources.forEach(src => {
-    const cfg = getConfig(src);
-    const chip = document.createElement('span');
-    chip.className = 'filter-chip';
-    chip.dataset.source = src;
-    chip.textContent = src;
-    chip.style.setProperty('--chip-color', cfg.accent);
-    row.appendChild(chip);
-  });
+document.getElementById('filter-row').addEventListener('click', (event) => {
+  const button = event.target.closest('.filter-chip');
+  if (!button) return;
+  activeFacet = button.dataset.facet;
+  buildFilterChips();
+  renderGrid();
+});
 
-  row.addEventListener('click', e => {
-    const chip = e.target.closest('.filter-chip');
-    if (!chip) return;
-    row.querySelectorAll('.filter-chip').forEach(c => c.classList.remove('active'));
-    chip.classList.add('active');
-    activeSource = chip.dataset.source;
-    renderGrid();
+document.getElementById('kind-row').addEventListener('click', (event) => {
+  const button = event.target.closest('.kind-btn');
+  if (!button || button.dataset.kind === activeKind) return;
+  activeKind = button.dataset.kind;
+  activeFacet = 'all';
+  document.querySelectorAll('#kind-row .kind-btn').forEach((other) => {
+    const on = other === button;
+    other.classList.toggle('active', on);
+    other.setAttribute('aria-pressed', String(on));
   });
+  buildFilterChips();
+  renderGrid();
+});
+
+function showCounts() {
+  const counts = { all: ALL.length, reference: 0, meme: 0 };
+  for (const entry of ALL) counts[entry.kind] = (counts[entry.kind] || 0) + 1;
+  document.querySelectorAll('[data-count]').forEach((span) => { span.textContent = counts[span.dataset.count] ?? 0; });
+  document.getElementById('hero-counts').textContent = `${counts.reference} References · ${counts.meme} Memes`;
 }
 
 /* ── Music rendering ───────────────────────────────────────────────────────── */
@@ -918,21 +1052,28 @@ function renderMusic(data) {
 
 /* ── Bootstrap ─────────────────────────────────────────────────────────────── */
 (async function init() {
+  const grid = document.getElementById('ref-grid');
   try {
-    const [refsRes, musicRes] = await Promise.all([
-      fetch('api/v1/references.json'),
-      fetch('api/v1/music.json'),
-    ]);
-    const data      = await refsRes.json();
-    const musicData = await musicRes.json();
-    ALL_REFS = data.references;
+    const res = await fetch('api/v2/catalogue.json');
+    if (!res.ok) throw new Error(`HTTP ${res.status}`);
+    ALL = (await res.json()).entries;
+    showCounts();
     buildFilterChips();
     renderGrid();
-    renderMusic(musicData);
+    matcherStatus.textContent = idleStatus();
   } catch (err) {
-    document.getElementById('ref-grid').innerHTML =
-      `<div class="loading-msg">Failed to load references.json. <a href="api/v1/references.json" style="color:#f9a8d4">Open directly</a></div>`;
-    console.error('References load error:', err);
+    grid.innerHTML =
+      `<div class="loading-msg">Failed to load catalogue.json. <a href="api/v2/catalogue.json" style="color:#f9a8d4">Open directly</a></div>`;
+    console.error('Catalogue load error:', err);
+  }
+  // Music is its own file; if it fails, the catalogue above still stands.
+  try {
+    const res = await fetch('api/v1/music.json');
+    if (!res.ok) throw new Error(`HTTP ${res.status}`);
+    renderMusic(await res.json());
+  } catch (err) {
+    document.getElementById('songs-grid').innerHTML = '<div class="loading-msg">Failed to load music.json.</div>';
+    console.error('Music load error:', err);
   }
 })();
 </script>
