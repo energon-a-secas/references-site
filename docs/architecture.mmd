@@ -1,5 +1,6 @@
 ---
 config:
+  look: classic
   theme: base
   themeVariables:
     primaryColor: "#0f172a"
@@ -10,7 +11,7 @@ config:
     tertiaryColor: "#1e293b"
     clusterBkg: "#f0f7ff"
     clusterBorder: "#bfdbfe"
-    edgeLabelBackground: "#e8f0ff"
+    edgeLabelBackground: "#1e293b"
     mainBkg: "#0f172a"
     nodeBorder: "#0063e5"
     titleColor: "#1e1b4b"
@@ -19,17 +20,21 @@ config:
 ---
 
 flowchart TB
-    User([User]) --> Frontend["index.html\nLive regex playground"]
-    APIClient([API Client]) --> API1["/api/v1/references.json\n37 cultural references"]
-    APIClient --> API2["/api/v1/music.json\nSongs + recommendations"]
-
-    subgraph App["Static Site (No Build Step)"]
-        Frontend --> Matcher["Live regex engine\nApplies all 37 patterns in real time"]
-        Frontend --> API1
-        Matcher --> Cards["Matching cards\nHighlighted in grid"]
-    end
+    Form["GitHub issue form"] -->|"approved label<br>scripts/submission.mjs"| Catalogue
+    Vault["memes-site<br>uploads + admin labels"] -->|"make uploads"| Catalogue
 
     subgraph DataLayer["Static JSON API (GitHub Pages)"]
-        API1
-        API2
+        Catalogue[("api/v2/catalogue.json<br>The catalogue: references + memes")]
+        Catalogue -->|"make catalogue"| API1["/api/v1/references.json<br>Entries with a trigger"]
+        API2["/api/v1/music.json<br>Songs + recommendations"]
     end
+
+    subgraph App["Static Site (No Build Step)"]
+        Frontend["index.html<br>Regex playground + meme grid"]
+    end
+
+    Catalogue --> Frontend
+    API2 --> Frontend
+    API1 --> Bot["Enerbot Slack bot"]
+    API1 -->|"amigos-ios: make data"| Amigos["Amigos de Enerbot app"]
+    Catalogue -->|"memes-site: make catalogue"| MemesData["memes-site js/data.js<br>Bundled memes"]

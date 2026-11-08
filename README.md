@@ -2,7 +2,7 @@
 
 # Enerbot Reference Matrix
 
-Browse the 37 cultural references and memes behind the Enerbot Slack bot. Live regex playground and a clean JSON API, no auth required.
+Every cultural reference and meme the Energon community uses: the Enerbot Slack bot's regex triggers and the Meme Vault's images. Live regex playground and a clean JSON API, no auth required.
 
 [![Live][badge-site]][url-site]
 [![HTML5][badge-html]][url-html]
@@ -28,7 +28,7 @@ Browse the 37 cultural references and memes behind the Enerbot Slack bot. Live r
 
 ---
 
-A static JSON API and live playground for every cultural reference and meme in the [Enerbot](https://github.com/energon-a-secas) Slack bot.
+A static JSON API and live playground for every cultural reference and meme the Energon community uses: the [Enerbot](https://github.com/energon-a-secas) Slack bot's clips and the [Meme Vault](https://memes.neorgon.com/)'s images, in one catalogue.
 
 **Live:** [references.neorgon.com](https://references.neorgon.com/) · static HTML + JSON, no build step, no backend.
 
@@ -38,20 +38,57 @@ A static JSON API and live playground for every cultural reference and meme in t
 
 The original bot identifies meme-worthy phrases by running incoming Slack messages through a table of regex patterns. Each match returns a video link or GIF. This repo exposes that entire reference table as a documented, versioned JSON API, and adds a browser playground where you can type anything and watch the patterns fire in real time.
 
+Memes are references too. The catalogue holds the bot's clips and every meme on the Meme Vault in one list, where `kind` tells them apart. The bot still reads only the entries that carry a regex trigger, so giving a meme a trigger is all it takes for Enerbot to answer with it.
+
 ---
 
 ## API endpoints
 
 | Endpoint | Description |
 |----------|-------------|
-| `GET /api/v1/references.json` | All 37 cultural references with regex triggers, media URLs, language, and tags |
+| `GET /api/v2/catalogue.json` | The catalogue: every reference and meme, with kind, media, category or source, credit and the date it was added |
+| `GET /api/v1/references.json` | Every catalogue entry with a regex trigger, in the shape the bot reads. Built from the catalogue |
 | `GET /api/v1/music.json` | Songs, dance videos, and music recommendations |
 
-Both are plain JSON files served from GitHub Pages. No auth. No rate limits. CORS-open.
+All are plain JSON files served from GitHub Pages. No auth. No rate limits. CORS-open.
 
 ---
 
-## Reference schema
+## Catalogue schema
+
+Every entry is a reference, and `kind` says which: `reference` (a clip the bot answers with) or `meme` (an image).
+
+```json
+{
+  "id":       "canon-event",
+  "kind":     "meme",
+  "label":    "Canon event",
+  "category": "templates",
+  "media": [
+    { "url": "https://memes.neorgon.com/assets/images/templates/canon-event.png", "type": "image", "primary": true }
+  ],
+  "tags":     [],
+  "origin":   "vault",
+  "added":    "2024-08-26"
+}
+```
+
+| Field | Type | Description |
+|-------|------|-------------|
+| `kind` | string | `reference` or `meme` |
+| `category` | string? | A meme's category on the Meme Vault |
+| `source` | string? | A reference's show, movie, or origin |
+| `trigger` | object? | The regex the bot answers to (see below). Every `reference` has one; a meme may |
+| `media` | array | `url`, `type` (`youtube`, `gif` or `image`) and `primary`; exactly one is primary |
+| `origin` | string | `enerbot` (the bot's original matrix), `submission` (the issue form), `vault` (a Meme Vault file) or `upload` (a Meme Vault upload) |
+| `credit` | string? | Who to credit: the GitHub handle of a submission, or how an uploader chose to appear ("Anon") |
+| `added` | string | The date it joined, `YYYY-MM-DD` |
+
+`label`, `language`, `tags` and `notes` mean what they mean in v1, below. The `meta` block carries `count` and per-kind counts in `kinds`.
+
+---
+
+## Reference schema, v1
 
 ```json
 {
@@ -138,33 +175,16 @@ end
 
 ---
 
-## Sources
-
-| Source | References | Language |
-|--------|-----------|----------|
-| Te lo resumo así no más | 21 | es |
-| Los Simpsons | 4 | es |
-| Family Guy | 3 | en |
-| Star Wars | 2 | es |
-| Carlos Matos (BitConnect) | 2 | en |
-| Avengers: Infinity War | 1 | en |
-| Harrison Ford / Air Force One | 1 | en |
-| 31 Minutos | 1 | es |
-| Gokudolls | 1 | es |
-| No explain needed | 1 | es |
-
----
-
 ## Contributing a reference
 
 Missing a reference? Submit one directly from the site or via GitHub:
 
-1. Go to **[references.neorgon.com](https://references.neorgon.com/)** and click **Submit a reference**, or open a [new issue](https://github.com/energon-a-secas/reference-site/issues/new?template=new-reference.yml) using the form template.
+1. Go to **[references.neorgon.com](https://references.neorgon.com/)** and click **Submit a reference**, or open a [new issue](https://github.com/energon-a-secas/references-site/issues/new?template=new-reference.yml) using the form template.
 2. Fill in the label, source, trigger phrases, media URL, language, and tags.
-3. A maintainer reviews the submission. Once the `approved` label is added, a GitHub Action automatically opens a PR with the new entry.
-4. After the PR is merged, the submitter is credited as a contributor.
+3. A maintainer reviews the submission. Once the `approved` label is added, a GitHub Action adds the entry to the catalogue, rebuilds `references.json`, and opens a PR.
+4. After the PR is merged, the entry carries the submitter's GitHub handle as its credit.
 
-No manual JSON editing required.
+No manual JSON editing required. Memes go up on the [Meme Vault](https://memes.neorgon.com/), and `make uploads` brings them into the catalogue.
 
 ---
 
@@ -174,11 +194,18 @@ No manual JSON editing required.
 
 ```
 references-api/
-├── index.html              # Playground + API docs
+├── index.html              # Playground, meme grid and API docs
 ├── api/
+│   ├── v2/
+│   │   └── catalogue.json  # The catalogue: the one list, edited by hand or by the scripts below
 │   └── v1/
-│       ├── references.json # 37 cultural references with regex triggers
+│       ├── references.json # Built from the catalogue: entries with a trigger
 │       └── music.json      # Songs and recommendations
+├── scripts/
+│   ├── catalogue.mjs       # Validate the catalogue, rebuild v1 (make catalogue, make check)
+│   ├── submission.mjs      # Issue form to catalogue entry, run by the submission workflow
+│   └── import-uploads.mjs  # Meme Vault uploads into the catalogue (make uploads)
+├── tests/                  # make test
 └── cb-enerbot-private/     # Source Ruby bot (reference only, own .git)
 ```
 
@@ -187,12 +214,12 @@ references-api/
 ## Running locally
 
 ```bash
-cd references-api
-python3 -m http.server 8080
-# open http://localhost:8080
+make serve       # http://localhost:8805
+make catalogue   # after editing api/v2/catalogue.json
+make test
 ```
 
-Or open `index.html` directly in a browser.
+The page fetches the catalogue, so serve it over HTTP rather than opening `index.html` from disk.
 
 ---
 
@@ -201,7 +228,8 @@ Or open `index.html` directly in a browser.
 - Deep space background (`#000912`)
 - Animated starfield (180 stars, canvas)
 - Per-source neon accent colors
-- Live regex playground: input triggers real-time match highlighting across the entire card grid
+- Live regex playground: input triggers real-time match highlighting across the entire card grid, memes included
+- A References / Memes / All toggle, with sources and categories as filter chips
 - API docs with syntax-highlighted code examples
 - `prefers-reduced-motion` respected
 
@@ -209,13 +237,13 @@ Or open `index.html` directly in a browser.
 
 ## Tech
 
-Pure HTML + CSS + JavaScript. No frameworks, no build step. Data is a static JSON file. The "API" is just a well-structured file with a stable URL. Pattern matching uses the browser's native `RegExp`.
+Pure HTML + CSS + JavaScript. No frameworks, no build step for the site. Data is static JSON: one catalogue, plus the v1 file a small Node script builds from it. The "API" is just well-structured files with stable URLs. Pattern matching uses the browser's native `RegExp`.
 
 ---
 
 ## Source data
 
-Original patterns live in `cb-enerbot-private/actions/cultural_references.rb`.
+The bot's original patterns lived in `cb-enerbot-private/actions/cultural_references.rb`, which now fetches `api/v1/references.json` from the live site. Bundled memes are files in the [memes-site](https://github.com/energon-a-secas/memes-site) repo; uploads live in its Convex deployment.
 
 ---
 
