@@ -63,10 +63,12 @@ and pull request, so a hand-edited catalogue PR gets the same checks.
 **Uploads are owned by `scripts/import-uploads.mjs`.** It replaces every
 `origin: upload` entry with a fresh snapshot of memes-site's public
 `memes:list` (production deployment `polite-jellyfish-291`) and copies admins'
-categories and labels onto bundled memes from `memes:organization`. It builds
-each entry from an allowlist: the query also returns `uploadedBy` and
-`ownerSubject`, and neither may ever reach this public file (a test holds that).
-Edit uploads on memes.neorgon.com, then re-run `make uploads`.
+categories and labels onto bundled memes from `memes:organization`. The credit
+is the query's `displayName`, which the site sets to "Anon" for an anonymous
+upload. Each entry is built from an allowlist, so no uploader account id,
+storage id or hidden name can reach this public file, even from a deployment
+whose `memes:list` still sends them (a test holds that). Edit uploads on
+memes.neorgon.com, then re-run `make uploads`.
 
 **Critical detail:** `trigger.pattern` is raw Ruby regex source that also has to
 read the same in JavaScript (the playground) and ICU (the Amigos app). Two

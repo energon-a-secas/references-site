@@ -12,8 +12,9 @@
 //   - copies an admin's category and labels onto the matching bundled meme.
 //
 // An upload's attribution is the name the site shows publicly (displayName,
-// "Anon" for an anonymous upload). The query also returns uploadedBy and
-// ownerSubject; neither is ever copied.
+// "Anon" for an anonymous upload). Entries are built from an allowlist, so an
+// uploader's account id, a storage id or a name they hid never reaches the
+// catalogue, even from a deployment whose memes:list still sends them.
 //
 //   node scripts/import-uploads.mjs                 fetch, merge, rebuild v1
 //   node scripts/import-uploads.mjs --check         exit 1 if the snapshot is stale
@@ -73,7 +74,10 @@ export function uploadEntry(row) {
   if (typeof row._creationTime !== 'number') problems.push('a creation time');
   if (problems.length) throw new Error(`upload ${row._id ?? '?'} lacks ${problems.join(', ')}`);
 
-  const credit = row.displayAnonymous === false && typeof row.displayName === 'string' && row.displayName.trim() ? row.displayName.trim() : 'Anon';
+  // memes:list sends displayAnonymous no longer; a reply that still carries it
+  // is honoured, so a name the uploader hid is never credited.
+  const shown = typeof row.displayName === 'string' ? row.displayName.trim() : '';
+  const credit = row.displayAnonymous === true || !shown ? 'Anon' : shown;
   return {
     id: `${slug(row.name) || 'meme'}-${row._id.slice(-6)}`,
     kind: 'meme',

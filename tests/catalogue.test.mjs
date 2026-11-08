@@ -148,8 +148,31 @@ test('an upload is built from an allowlist: no uploader name or account id', () 
   assert.equal(entry.media[0].type, 'gif');
   const text = JSON.stringify(entry);
   for (const secret of ['Real Name', 'user_secret', 'kg2secret']) assert.ok(!text.includes(secret), secret);
+  assert.deepEqual(Object.keys(entry).sort(), ['added', 'category', 'credit', 'id', 'kind', 'label', 'media', 'origin', 'tags']);
   assert.equal(uploadEntry({ ...row, displayAnonymous: false, displayName: 'Tomás' }).credit, 'Tomás');
+  // A name the uploader hid is never credited, whatever displayName says.
+  assert.equal(uploadEntry({ ...row, displayName: 'Real Name' }).credit, 'Anon');
   assert.throws(() => uploadEntry({ ...row, url: 'https://evil.example/x.png' }), /storage URL/);
+});
+
+test('the trimmed memes:list reply credits displayName, and "Anon" when there is none', () => {
+  const row = {
+    _id: 'jn76abcdefghijklmnopqrstuvwxy7k2q9',
+    _creationTime: Date.UTC(2026, 10, 8, 12),
+    name: 'game night',
+    category: 'games',
+    labels: [],
+    ext: 'jpg',
+    url: 'https://polite-jellyfish-291.convex.cloud/api/storage/0b1c2d3e-0000-4000-8000-000000000001',
+    displayName: 'Tomás',
+    mine: false,
+  };
+  assert.equal(uploadEntry(row).credit, 'Tomás');
+  assert.equal(uploadEntry({ ...row, displayName: 'Anon' }).credit, 'Anon');
+  assert.equal(uploadEntry({ ...row, displayName: '   ' }).credit, 'Anon');
+  const { displayName, ...unnamed } = row;
+  assert.equal(uploadEntry(unnamed).credit, 'Anon');
+  assert.ok(!('mine' in uploadEntry(row)));
 });
 
 test('names read as words and slugs fold accents', () => {
@@ -164,8 +187,8 @@ test('importing uploads replaces the block, keeps curated entries and applies or
   const vault = base.entries.find((entry) => entry.origin === 'vault');
   const curated = base.entries.filter((entry) => entry.origin !== 'upload');
   const rows = [
-    { _id: 'aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa2', _creationTime: 2, name: 'second', category: 'general', ext: 'png', url: 'https://polite-jellyfish-291.convex.cloud/api/storage/2', displayAnonymous: true },
-    { _id: 'aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa1', _creationTime: 1, name: 'first', category: 'general', ext: 'png', url: 'https://polite-jellyfish-291.convex.cloud/api/storage/1', displayAnonymous: true },
+    { _id: 'aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa2', _creationTime: 2, name: 'second', category: 'general', ext: 'png', url: 'https://polite-jellyfish-291.convex.cloud/api/storage/2', displayName: 'Anon', mine: false },
+    { _id: 'aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa1', _creationTime: 1, name: 'first', category: 'general', ext: 'png', url: 'https://polite-jellyfish-291.convex.cloud/api/storage/1', displayName: 'Anon', mine: false },
   ];
   const merged = mergeUploads(base, rows, [{ memeKey: vault.id, category: 'mood', labels: ['work'] }]);
   const uploads = merged.catalogue.entries.filter((entry) => entry.origin === 'upload');
