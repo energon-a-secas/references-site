@@ -106,29 +106,9 @@
     }
     .header-actions .nav-link:hover { color: #fff; background: rgba(255,255,255,.12); }
 
-    /* ── Hero ─────────────────────────────────────────────────────────────── */
-    .hero { padding: 64px 40px 48px; text-align: center; }
-    .hero-badge {
-      display: inline-flex; align-items: center; gap: 8px;
-      padding: 5px 14px; border-radius: 20px; margin-bottom: 24px;
-      background: rgba(244,114,182,.1); border: 1px solid rgba(244,114,182,.25);
-      color: #f9a8d4; font-size: .73rem; font-weight: 600; letter-spacing: .08em; text-transform: uppercase;
-    }
-    .badge-dot { width: 6px; height: 6px; border-radius: 50%; background: #f9a8d4; animation: pulse-dot 2s ease-in-out infinite; }
-    @keyframes pulse-dot { 0%,100% { opacity:1; transform:scale(1); } 50% { opacity:.4; transform:scale(.6); } }
-
-    .hero-heading {
-      font-size: clamp(2rem, 5.5vw, 3.5rem); font-weight: 800;
-      line-height: 1.1; letter-spacing: -.02em; margin-bottom: 16px;
-    }
-    .neon-word {
-      color: #f9a8d4;
-    }
-    .hero-sub { font-size: 1rem; color: var(--text-secondary); max-width: 520px; margin: 0 auto 36px; line-height: 1.7; }
-
-    /* ── Live Matcher ─────────────────────────────────────────────────────── */
+    /* ── Live Matcher (first in <main>: the page opens on it) ─────────────── */
     .matcher-wrap {
-      max-width: 680px; margin: 0 auto;
+      max-width: 680px; margin: 40px auto 56px;
       background: rgba(255,255,255,.04); border: 1px solid rgba(244,114,182,.2);
       border-radius: 20px; padding: 24px; backdrop-filter: blur(8px);
     }
@@ -280,7 +260,15 @@
     }
     .ref-card:hover .card-thumb-play { opacity: 1; }
     .card-thumb-play svg { filter: drop-shadow(0 2px 6px rgba(0,0,0,.5)); }
-    .card-thumb img.thumb-error { display: none; }
+    /* A preview that did not load keeps its box and says so (the script below
+       marks it): YouTube answers a gone video with a grey 120px image, not an error. */
+    .card-thumb.thumb-missing {
+      display: flex; align-items: center; justify-content: center;
+      border-style: dashed; border-color: var(--border-glow);
+      background: color-mix(in srgb, var(--card-accent, #f472b6) 6%, rgba(0,0,0,.3));
+    }
+    .card-thumb.thumb-missing .card-thumb-play { display: none; }
+    .thumb-missing-note { font-size: .75rem; font-weight: 600; color: var(--text-secondary); }
     /* A meme is the whole picture, so it is shown whole rather than cropped to 16:9. */
     .card-thumb.meme-thumb { aspect-ratio: 4 / 3; }
     .card-thumb.meme-thumb img { object-fit: contain; }
@@ -288,16 +276,17 @@
     .media-badge.image-badge { border-color: rgba(244,63,94,.22); color: #fb7185; background: rgba(244,63,94,.07); }
     .matcher-more { font-size: .76rem; color: var(--text-muted); padding: 6px 2px 0; }
     .submit-cta-desc a { color: var(--accent-bright); }
-    .card-thumb.thumb-hidden { display: none; }
 
     .hidden { display: none !important; }
 
     /* ── API docs section ─────────────────────────────────────────────────── */
     .docs-section { margin-top: 64px; }
-    .docs-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+    /* minmax(0, 1fr) and min-width: 0 let a long code line scroll inside its
+       block; with plain 1fr the cards grew to the line and the page ran 472px wide on a phone. */
+    .docs-grid { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 16px; }
     .docs-card {
       background: var(--surface); border: 1px solid var(--border); border-radius: 16px;
-      padding: 24px; display: flex; flex-direction: column; gap: 12px;
+      padding: 24px; display: flex; flex-direction: column; gap: 12px; min-width: 0;
     }
     .docs-card-title { font-size: .85rem; font-weight: 700; color: var(--text-primary); }
     .docs-card-sub { font-size: .8rem; color: var(--text-secondary); line-height: 1.6; }
@@ -381,9 +370,9 @@
 
     /* ── Responsive ───────────────────────────────────────────────────────── */
     @media (max-width: 760px) {
-      .hero { padding: 48px 20px 36px; }
+      .matcher-wrap { margin: 24px auto 40px; padding: 18px; }
       .main-content { padding: 0 20px 60px; }
-      .docs-grid { grid-template-columns: 1fr; }
+      .docs-grid { grid-template-columns: minmax(0, 1fr); }
     }
     @media (max-width: 500px) {
       .ref-grid { grid-template-columns: 1fr; }
@@ -457,7 +446,7 @@
     </a>
     <div class="header-right">
       <nav class="header-actions">
-        <a data-keep-mobile class="nav-link" href="#music">Music</a>
+        <a class="nav-link" href="#music">Music</a>
         <a data-keep-mobile class="nav-link" href="#api-docs">API Docs</a>
         <a class="nav-link" href="https://github.com/energon-a-secas/references-site/issues/new?template=new-reference.yml" target="_blank" rel="noopener noreferrer" style="color:#f9a8d4;border-color:rgba(244,114,182,.2)">Submit</a>
         <a class="nav-link" href="https://github.com/energon-a-secas/references-site" target="_blank" rel="noopener noreferrer">GitHub</a>
@@ -477,17 +466,9 @@
     </div>
   </header>
 
-  <!-- Hero + Live Matcher -->
-  <section class="hero">
-    <div class="hero-badge">
-      <span class="badge-dot"></span>
-      <span id="hero-counts">References and memes</span> · Live Regex · Static JSON API
-    </div>
-    <h1 class="hero-heading">
-      The <span class="neon-word">regex patterns</span><br>behind Enerbot
-    </h1>
-    <p class="hero-sub">Every reference includes its original regex trigger. Type anything below and watch the patterns fire, exactly as the Slack bot does.</p>
+  <main class="main-content" id="main">
 
+    <!-- Live matcher: the page opens on it. The header subtitle is the one positioning line. -->
     <div class="matcher-wrap">
       <div class="matcher-label">Live Regex Matcher</div>
       <input
@@ -502,9 +483,6 @@
       <div class="matcher-status" id="matcher-status">Type a phrase to test it against every pattern.</div>
       <div class="matcher-results" id="matcher-results"></div>
     </div>
-  </section>
-
-  <main class="main-content" id="main">
 
     <!-- Reference browser -->
     <div class="section-head">
@@ -775,7 +753,7 @@ function buildThumbHtml(entry) {
     const vid = extractYouTubeId(primary.url);
     if (!vid) return '';
     return `<a class="card-thumb" href="${escHtml(primary.url)}" target="_blank" rel="noopener noreferrer">
-      <img src="https://img.youtube.com/vi/${vid}/mqdefault.jpg" alt="${escHtml(entry.label)}" loading="lazy">
+      <img src="https://img.youtube.com/vi/${vid}/mqdefault.jpg" alt="${escHtml(entry.label)}" loading="lazy" data-yt>
       <div class="card-thumb-play">${PLAY_SVG}</div>
     </a>`;
   }
@@ -961,13 +939,30 @@ function renderGrid() {
   if (matcherInput.value.trim()) updateMatcher();
 }
 
-/* A thumbnail that fails to load folds away instead of showing a broken image. */
-document.getElementById('ref-grid').addEventListener('error', (event) => {
-  const img = event.target;
-  if (!(img instanceof HTMLImageElement)) return;
-  img.classList.add('thumb-error');
+/* A preview that cannot be shown becomes a labelled empty box instead of a
+   broken image. Two ways in: the image fails outright, or YouTube answers a
+   gone video with HTTP 404 and its 120x90 grey stand-in, which loads as a
+   normal image (mqdefault.jpg is 320 wide when the video exists). */
+function markThumbMissing(img) {
   const thumb = img.closest('.card-thumb');
-  if (thumb) thumb.classList.add('thumb-hidden');
+  if (!thumb || thumb.classList.contains('thumb-missing')) return;
+  const note = document.createElement('span');
+  note.className = 'thumb-missing-note';
+  note.textContent = 'Preview unavailable';
+  thumb.classList.add('thumb-missing');
+  thumb.setAttribute('aria-label', `${img.alt}: preview unavailable`);
+  img.replaceWith(note);
+}
+
+const refGrid = document.getElementById('ref-grid');
+refGrid.addEventListener('error', (event) => {
+  if (event.target instanceof HTMLImageElement) markThumbMissing(event.target);
+}, true);
+refGrid.addEventListener('load', (event) => {
+  const img = event.target;
+  if (img instanceof HTMLImageElement && img.hasAttribute('data-yt') && img.naturalWidth > 0 && img.naturalWidth <= 120) {
+    markThumbMissing(img);
+  }
 }, true);
 
 /* ── Kind toggle and facet chips ───────────────────────────────────────────── */
@@ -1021,7 +1016,6 @@ function showCounts() {
   const counts = { all: ALL.length, reference: 0, meme: 0 };
   for (const entry of ALL) counts[entry.kind] = (counts[entry.kind] || 0) + 1;
   document.querySelectorAll('[data-count]').forEach((span) => { span.textContent = counts[span.dataset.count] ?? 0; });
-  document.getElementById('hero-counts').textContent = `${counts.reference} References · ${counts.meme} Memes`;
 }
 
 /* ── Music rendering ───────────────────────────────────────────────────────── */
